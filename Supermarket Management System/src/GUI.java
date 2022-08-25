@@ -32,7 +32,17 @@ public class GUI{
 	JPanel adminLoginPanel;
 	JPanel adminPanel;
 
+	// objects
+	Users users;
+
 	GUI(){
+		// objects
+		try {
+			users = new Users();
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
 		// frame
 		frame = new JFrame();
 
