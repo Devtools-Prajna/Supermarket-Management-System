@@ -1,14 +1,7 @@
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.*;
+import java.awt.event.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JPasswordField;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 public class GUI{
 	int SCREEN_WIDTH = 1000;
@@ -20,76 +13,133 @@ public class GUI{
 	int FONT_DEFAULT_SIZE = 15;
 	int POSITION_X_LOGIN = (SCREEN_WIDTH/2)-185;
 	int POSITION_Y_LOGIN = (SCREEN_HEIGHT/2)-150;
-	int POSITION_X_USER = 0;
-	int POSITION_Y_USER = 0;
-	
-	JFrame frame;
-
-	JPanel userLoginPanel;
-	JPanel userSignupPanel;
-	JPanel userPanel;
-
-	JPanel adminLoginPanel;
-	JPanel adminPanel;
+	int POSITION_X_USER = 200;
+	int POSITION_Y_USER = 100;
+	String ROOT_PASSWORD = "root001";
 
 	// objects
 	Users users;
 
-	GUI(){
+	// frame
+	JFrame frame;
+
+	// panel
+	JPanel userLoginPanel;
+	JPanel userSignupPanel;
+	JPanel userPanel;
+	JPanel userProfilePanel;
+	JPanel userOrdersPanel;
+
+	JPanel adminLoginPanel;
+	JPanel adminPanel;
+	JPanel adminControlPanel;
+	JPanel adminAddItemsPanel;
+	
+	// labels
+	JLabel labelLogin;
+	JLabel labelUsername;
+	JLabel labelPassword;
+	JLabel labelProfileHeader;
+	JLabel labelMarketHeader;
+	JLabel labelOrdersHeader;
+	JLabel labelProfileUsername;
+	JLabel labelProfileMobileNo;
+	JLabel labelProfilePassword;
+	JLabel labelUserSignup;
+	JLabel labelSignupUsername;
+	JLabel labelSignupMobileNumber;
+	JLabel labelSignupPassword;
+
+	JLabel labelAdminLogin;
+	JLabel labelAdminPassword;
+	JLabel labelAdminMarketHeader;
+	JLabel labelAdminControlHeader;
+	JLabel labelAdminAddItemsHeader;
+	
+	// textfields
+	JTextField textfieldUsername;
+	JTextField textfieldEditUsername;
+	JTextField textfieldEditMobileNo;
+	JTextField textfieldSignupUsername;
+	JTextField textfieldSignupMobileNumber;
+
+	// passwordfileds
+	JPasswordField passwordFieldUser;
+	JPasswordField passfieldEditPassword;
+	JPasswordField passwordFieldSignupUser;
+	JPasswordField passwordFieldAdmin;
+	
+	// buttons
+	JButton btnProfile;
+	JButton btnUserLoginAttempt;
+	JButton btnUserSignupPanel;
+	JButton btnMarket;
+	JButton btnOrders;
+	JButton btnLogout;
+	JButton btnDeleteAccount;
+	JButton btnSaveChanges;
+	JButton btnUserLoginPanel;
+	JButton btnUserSignupAttempt;
+	
+	JButton btnAdmin;
+	JButton btnAdminLoginAtttempt;
+	JButton btnAdminUser;
+	JButton btnAdminLogout;
+	JButton btnAdminControl;
+	JButton btnAdminMarket;
+	JButton btnAdminAddItems;
+
+	GUI() throws Exception{
 		// objects
-		try {
-			users = new Users();
-		} catch (Exception e) {
-			System.out.println(e);
-		}
+		users = new Users();
 
 		// frame
 		frame = new JFrame();
 
 		// login label
-		JLabel labelLogin = new JLabel("LOGIN");
+		labelLogin = new JLabel("LOGIN");
 		labelLogin.setBounds(POSITION_X_LOGIN+125, POSITION_Y_LOGIN, 120, 60);
 		labelLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
 		
-		JLabel labelUsername = new JLabel("Username ");
+		labelUsername = new JLabel("Username ");
 		labelUsername.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
 		labelUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-		JLabel labelPassword = new JLabel("Password ");
+		labelPassword = new JLabel("Password ");
 		labelPassword.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 		labelPassword.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+140, 120, 30);
 
 		// login textfields
-		JTextField textfieldUsername = new JTextField();
+		textfieldUsername = new JTextField();
 		textfieldUsername.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+100, 250, 30);
 		textfieldUsername.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-		JPasswordField passwordFieldUser = new JPasswordField();
+		passwordFieldUser = new JPasswordField();
 		passwordFieldUser.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+140, 250, 30);
 		passwordFieldUser.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 		// Buttons
-		JButton btnUserLogin = new JButton("Login");
-		btnUserLogin.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+200, 100, 30);
-		btnUserLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-		btnUserLogin.setForeground(Color.WHITE);
-		btnUserLogin.setBackground(Color.BLACK);
-		btnUserLogin.setOpaque(true);
-		btnUserLogin.setFocusable(false);
-		btnUserLogin.setBorderPainted(false);
-		btnUserLogin.setFocusPainted(false);
+		btnUserLoginAttempt = new JButton("Login");
+		btnUserLoginAttempt.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+200, 100, 30);
+		btnUserLoginAttempt.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+		btnUserLoginAttempt.setForeground(Color.WHITE);
+		btnUserLoginAttempt.setBackground(Color.BLACK);
+		btnUserLoginAttempt.setOpaque(true);
+		btnUserLoginAttempt.setFocusable(false);
+		btnUserLoginAttempt.setBorderPainted(false);
+		btnUserLoginAttempt.setFocusPainted(false);
 
-		JButton btnUserSignup = new JButton("Signup");
-		btnUserSignup.setBounds(POSITION_X_LOGIN+270, POSITION_Y_LOGIN+200, 100, 30);
-		btnUserSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-		btnUserSignup.setForeground(Color.WHITE);
-		btnUserSignup.setBackground(Color.BLACK);
-		btnUserSignup.setOpaque(true);
-		btnUserSignup.setFocusable(false);
-		btnUserSignup.setBorderPainted(false);
-		btnUserSignup.setFocusPainted(false);
+		btnUserSignupPanel = new JButton("Signup");
+		btnUserSignupPanel.setBounds(POSITION_X_LOGIN+270, POSITION_Y_LOGIN+200, 100, 30);
+		btnUserSignupPanel.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+		btnUserSignupPanel.setForeground(Color.WHITE);
+		btnUserSignupPanel.setBackground(Color.BLACK);
+		btnUserSignupPanel.setOpaque(true);
+		btnUserSignupPanel.setFocusable(false);
+		btnUserSignupPanel.setBorderPainted(false);
+		btnUserSignupPanel.setFocusPainted(false);
 
-		JButton btnAdmin = new JButton("Admin");
+		btnAdmin = new JButton("Admin");
 		btnAdmin.setBounds(25, 25, 100, 30);
 		btnAdmin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 		btnAdmin.setForeground(Color.WHITE);
@@ -107,147 +157,389 @@ public class GUI{
 		userLoginPanel.add(textfieldUsername);
 		userLoginPanel.add(labelPassword);
 		userLoginPanel.add(passwordFieldUser);
-		userLoginPanel.add(btnUserLogin);
+		userLoginPanel.add(btnUserLoginAttempt);
 		userLoginPanel.add(btnAdmin);
-		userLoginPanel.add(btnUserSignup);
+		userLoginPanel.add(btnUserSignupPanel);
 
 		// set content
 		frame.setContentPane(userLoginPanel);
 
 		// actions
-		btnUserLogin.addActionListener(new ActionListener(){
+		btnUserLoginAttempt.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// System.out.println(textfieldUsername.getText());
+				System.out.println("User Login attempt: " + textfieldUsername.getText()+ " " + String.valueOf(passwordFieldUser.getPassword()) + " ");
 
-				// labels
-				JLabel labelSignedUsername = new JLabel(textfieldUsername.getText());
-				labelSignedUsername.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
-				labelSignedUsername.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_HEADER_SIZE));
+				String[] userinfo = users.getUserinfo(textfieldUsername.getText());
 
-				// buttons
-				JButton btnLogout = new JButton("Logout");
-				btnLogout.setBounds(POSITION_X_USER, POSITION_Y_USER+SCREEN_HEIGHT-100, 100, 30);
-				btnLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				btnLogout.setForeground(Color.WHITE);
-				btnLogout.setBackground(Color.BLACK);
-				btnLogout.setOpaque(true);
-				btnLogout.setFocusable(false);
-				btnLogout.setBorderPainted(false);
-				btnLogout.setFocusPainted(false);
+				if(textfieldUsername.getText().equals("") || String.valueOf(passwordFieldUser.getPassword()).equals("")){
+					JOptionPane.showMessageDialog(null, "Please provide all the information", "Error", JOptionPane.ERROR_MESSAGE);
+				}else if(textfieldUsername.getText().equals(userinfo[1]) && String.valueOf(passwordFieldUser.getPassword()).equals(userinfo[3])){				
+					int userID = Integer.valueOf(userinfo[0]);
+					String username = userinfo[1];
+					String mobileNo = userinfo[2];
+					String password = userinfo[3];
 
-				btnLogout.addActionListener(new ActionListener(){
+					System.out.println(username + " user panel");
 
-					@Override
-					public void actionPerformed(ActionEvent arg0) {
-						// set content
-						frame.setContentPane(userLoginPanel);
-					}
+					// elements
+					labelMarketHeader = new JLabel("MARKET");
+					labelMarketHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+					labelMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+					labelProfileHeader = new JLabel("PROFILE");
+					labelProfileHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+					labelProfileHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+					labelOrdersHeader = new JLabel("ORDERS");
+					labelOrdersHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+					labelOrdersHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+					labelProfileUsername = new JLabel("Username");
+					labelProfileUsername.setBounds(POSITION_X_USER, POSITION_Y_USER+100, 200, 30);
+					labelProfileUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelProfileMobileNo = new JLabel("Mobile No");
+					labelProfileMobileNo.setBounds(POSITION_X_USER, POSITION_Y_USER+150, 200, 30);
+					labelProfileMobileNo.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelProfilePassword = new JLabel("Password");
+					labelProfilePassword.setBounds(POSITION_X_USER, POSITION_Y_USER+200, 200, 30);
+					labelProfilePassword.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					textfieldEditUsername = new JTextField();
+					textfieldEditUsername.setText(username);
+					textfieldEditUsername.setBounds(POSITION_X_USER+100, POSITION_Y_USER+100, 250, 30);
+					textfieldEditUsername.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 					
-				});
+					textfieldEditMobileNo = new JTextField();
+					textfieldEditMobileNo.setText(mobileNo);
+					textfieldEditMobileNo.setBounds(POSITION_X_USER+100, POSITION_Y_USER+150, 250, 30);
+					textfieldEditMobileNo.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+					
+					passfieldEditPassword = new JPasswordField();
+					passfieldEditPassword.setText(password);
+					passfieldEditPassword.setBounds(POSITION_X_USER+100, POSITION_Y_USER+200, 250, 30);
+					passfieldEditPassword.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-				// panel
-				userPanel = new JPanel();
-				userPanel.setBackground(Color.WHITE);
-				userPanel.setLayout(null);
-				userPanel.add(labelSignedUsername);
-				userPanel.add(btnLogout);
-				
-				// set content
-				frame.setContentPane(userPanel);
-				frame.validate();				
+					// buttons
+					btnProfile = new JButton("Profile");
+					btnProfile.setBounds(0, 100, 150, 50);
+					btnProfile.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnProfile.setForeground(Color.WHITE);
+					btnProfile.setBackground(Color.BLACK);
+					btnProfile.setOpaque(true);
+					btnProfile.setFocusable(false);
+					btnProfile.setBorderPainted(false);
+					btnProfile.setFocusPainted(false);
+					btnProfile.setEnabled(true);
+					
+					btnMarket = new JButton("Market");
+					btnMarket.setBounds(0, 150, 150, 50);
+					btnMarket.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnMarket.setForeground(Color.WHITE);
+					btnMarket.setBackground(Color.BLACK);
+					btnMarket.setOpaque(true);
+					btnMarket.setFocusable(false);
+					btnMarket.setBorderPainted(false);
+					btnMarket.setFocusPainted(false);
+					btnMarket.setEnabled(false);
+					
+					btnOrders = new JButton("Orders");
+					btnOrders.setBounds(0, 200, 150, 50);
+					btnOrders.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnOrders.setForeground(Color.WHITE);
+					btnOrders.setBackground(Color.BLACK);
+					btnOrders.setOpaque(true);
+					btnOrders.setFocusable(false);
+					btnOrders.setBorderPainted(false);
+					btnOrders.setFocusPainted(false);
+					btnOrders.setEnabled(true);
+
+					btnDeleteAccount = new JButton("Delete Account");
+					btnDeleteAccount.setBounds(SCREEN_WIDTH-340, SCREEN_HEIGHT-100, 150, 50);
+					btnDeleteAccount.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnDeleteAccount.setForeground(Color.WHITE);
+					btnDeleteAccount.setBackground(Color.BLACK);
+					btnDeleteAccount.setOpaque(true);
+					btnDeleteAccount.setFocusable(false);
+					btnDeleteAccount.setBorderPainted(false);
+					btnDeleteAccount.setFocusPainted(false);
+
+					btnSaveChanges = new JButton("Save Changes");
+					btnSaveChanges.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
+					btnSaveChanges.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnSaveChanges.setForeground(Color.WHITE);
+					btnSaveChanges.setBackground(Color.BLACK);
+					btnSaveChanges.setOpaque(true);
+					btnSaveChanges.setFocusable(false);
+					btnSaveChanges.setBorderPainted(false);
+					btnSaveChanges.setFocusPainted(false);
+					
+					btnLogout = new JButton("Logout");
+					btnLogout.setBounds(0, SCREEN_HEIGHT-100, 150, 50);
+					btnLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnLogout.setForeground(Color.WHITE);
+					btnLogout.setBackground(Color.BLACK);
+					btnLogout.setOpaque(true);
+					btnLogout.setFocusable(false);
+					btnLogout.setBorderPainted(false);
+					btnLogout.setFocusPainted(false);
+
+					// panel
+					userPanel = new JPanel();
+					userPanel.setBackground(Color.WHITE);
+					userPanel.setLayout(null);
+					userPanel.add(btnProfile);
+					userPanel.add(btnMarket);
+					userPanel.add(btnOrders);
+					userPanel.add(btnLogout);
+					userPanel.add(labelMarketHeader);
+
+					userProfilePanel = new JPanel();
+					userProfilePanel.setBackground(Color.WHITE);
+					userProfilePanel.setLayout(null);
+
+					userOrdersPanel = new JPanel();
+					userOrdersPanel.setBackground(Color.WHITE);
+					userOrdersPanel.setLayout(null);
+
+
+					// actions
+					btnProfile.addActionListener(new ActionListener(){
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							System.out.println(username + "User Profile panel");
+							btnMarket.setEnabled(true);
+							btnProfile.setEnabled(false);
+							btnOrders.setEnabled(true);
+
+							userProfilePanel.add(labelProfileHeader);
+							userProfilePanel.add(labelProfileUsername);
+							userProfilePanel.add(textfieldEditUsername);
+							userProfilePanel.add(labelProfileMobileNo);
+							userProfilePanel.add(textfieldEditMobileNo);
+							userProfilePanel.add(labelProfilePassword);
+							userProfilePanel.add(passfieldEditPassword);
+							userProfilePanel.add(btnProfile);
+							userProfilePanel.add(btnMarket);
+							userProfilePanel.add(btnOrders);
+							userProfilePanel.add(btnLogout);
+							userProfilePanel.add(btnSaveChanges);
+							userProfilePanel.add(btnDeleteAccount);
+
+							frame.setContentPane(userProfilePanel);
+							frame.validate();
+						}
+					});
+
+					btnMarket.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							System.out.println(username + " User Market panel");
+
+							btnMarket.setEnabled(false);
+							btnProfile.setEnabled(true);
+							btnOrders.setEnabled(true);
+							
+							userPanel.add(btnProfile);
+							userPanel.add(btnMarket);
+							userPanel.add(btnOrders);
+							userPanel.add(btnLogout);
+							userPanel.add(labelMarketHeader);
+
+							frame.setContentPane(userPanel);
+							frame.validate();
+						}
+						
+					});
+
+					btnOrders.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							System.out.println(username + " order panel");
+
+							btnMarket.setEnabled(true);
+							btnProfile.setEnabled(true);
+							btnOrders.setEnabled(false);
+
+							userOrdersPanel.add(btnProfile);
+							userOrdersPanel.add(btnMarket);
+							userOrdersPanel.add(btnOrders);
+							userOrdersPanel.add(btnLogout);
+							userOrdersPanel.add(labelOrdersHeader);
+
+							frame.setContentPane(userOrdersPanel);
+							frame.validate();
+						}
+						
+					});
+					
+					btnDeleteAccount.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							int answer = JOptionPane.showConfirmDialog(null, "Do you really want to delete your account?", "Confirm", JOptionPane.YES_NO_OPTION);
+							if(answer == 0){
+								System.out.println("User account deleted: " + username);
+								users.removeUser(userID);
+								System.out.println(users);
+								frame.setContentPane(userLoginPanel);
+								frame.validate();
+							}
+						}
+						
+					});
+
+					btnSaveChanges.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							String username = textfieldEditUsername.getText();
+							String mobileNo = textfieldEditMobileNo.getText();
+							String password = String.valueOf(passfieldEditPassword.getPassword());
+
+							System.out.println("Edit userinfo: " + username + " " + mobileNo + " " + password);
+
+							users.editUserinfo(userID, username, mobileNo, password);
+							JOptionPane.showMessageDialog(null, "Successfully applied changes!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+						}
+						
+					});
+
+					btnLogout.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							// set content
+							int answer = JOptionPane.showConfirmDialog(null, "Do you really want to signout?", "Confirm", JOptionPane.YES_NO_OPTION);
+							if(answer == 0){
+								System.out.println("logging out: " + username);
+								frame.setContentPane(userLoginPanel);
+								frame.validate();
+							}
+						}
+						
+					});
+
+					// set content
+					frame.setContentPane(userPanel);
+					frame.validate();				
+				}else{
+					JOptionPane.showMessageDialog(null, "Username or Password doesn't match!", "Error", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 			
 		});
 
-		btnUserSignup.addActionListener(new ActionListener(){
+		btnUserSignupPanel.addActionListener(new ActionListener(){
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// System.out.println("signup");
+				System.out.println("User signup panel");
 				// elements
-				JButton btnUserLogin = new JButton("Login");
-				btnUserLogin.setBounds(25, 25, 100, 30);
-				btnUserLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				btnUserLogin.setForeground(Color.WHITE);
-				btnUserLogin.setBackground(Color.BLACK);
-				btnUserLogin.setOpaque(true);
-				btnUserLogin.setFocusable(false);
-				btnUserLogin.setBorderPainted(false);
-				btnUserLogin.setFocusPainted(false);
+				btnUserLoginPanel = new JButton("Login");
+				btnUserLoginPanel.setBounds(25, 25, 100, 30);
+				btnUserLoginPanel.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				btnUserLoginPanel.setForeground(Color.WHITE);
+				btnUserLoginPanel.setBackground(Color.BLACK);
+				btnUserLoginPanel.setOpaque(true);
+				btnUserLoginPanel.setFocusable(false);
+				btnUserLoginPanel.setBorderPainted(false);
+				btnUserLoginPanel.setFocusPainted(false);
 
-				JLabel labelSignup = new JLabel("Signup");
-				labelSignup.setBounds(POSITION_X_LOGIN+125, POSITION_Y_LOGIN, 120, 60);
-				labelSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+				labelUserSignup = new JLabel("Signup");
+				labelUserSignup.setBounds(POSITION_X_LOGIN+125, POSITION_Y_LOGIN, 120, 60);
+				labelUserSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
 				
-				JLabel labelUsername = new JLabel("Username ");
-				labelUsername.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
-				labelUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				labelSignupUsername = new JLabel("Username ");
+				labelSignupUsername.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
+				labelSignupUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-				JLabel labelMobileNumber = new JLabel("Mobile No ");
-				labelMobileNumber.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				labelMobileNumber.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+140, 120, 30);
+				labelSignupMobileNumber = new JLabel("Mobile No ");
+				labelSignupMobileNumber.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				labelSignupMobileNumber.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+140, 120, 30);
 
-				JLabel labelPassword = new JLabel("Password ");
-				labelPassword.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				labelPassword.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+180, 120, 30);
+				labelSignupPassword = new JLabel("Password ");
+				labelSignupPassword.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				labelSignupPassword.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+180, 120, 30);
 
 				// login textfields
-				JTextField textfieldUsername = new JTextField();
-				textfieldUsername.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+100, 250, 30);
-				textfieldUsername.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+				textfieldSignupUsername = new JTextField();
+				textfieldSignupUsername.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+100, 250, 30);
+				textfieldSignupUsername.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-				JTextField textfieldMobileNumber = new JTextField();
-				textfieldMobileNumber.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+140, 250, 30);
-				textfieldMobileNumber.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+				textfieldSignupMobileNumber = new JTextField();
+				textfieldSignupMobileNumber.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+140, 250, 30);
+				textfieldSignupMobileNumber.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-				JPasswordField passwordFieldUser = new JPasswordField();
-				passwordFieldUser.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+180, 250, 30);
-				passwordFieldUser.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+				passwordFieldSignupUser = new JPasswordField();
+				passwordFieldSignupUser.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+180, 250, 30);
+				passwordFieldSignupUser.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-				JButton btnUserSignup = new JButton("Signup");
-				btnUserSignup.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+260, 100, 30);
-				btnUserSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				btnUserSignup.setForeground(Color.WHITE);
-				btnUserSignup.setBackground(Color.BLACK);
-				btnUserSignup.setOpaque(true);
-				btnUserSignup.setFocusable(false);
-				btnUserSignup.setBorderPainted(false);
-				btnUserSignup.setFocusPainted(false);
+				btnUserSignupAttempt = new JButton("Signup");
+				btnUserSignupAttempt.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+260, 100, 30);
+				btnUserSignupAttempt.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				btnUserSignupAttempt.setForeground(Color.WHITE);
+				btnUserSignupAttempt.setBackground(Color.BLACK);
+				btnUserSignupAttempt.setOpaque(true);
+				btnUserSignupAttempt.setFocusable(false);
+				btnUserSignupAttempt.setBorderPainted(false);
+				btnUserSignupAttempt.setFocusPainted(false);
 
 				// panel
 				userSignupPanel = new JPanel();
 				userSignupPanel.setBackground(Color.WHITE);
 				userSignupPanel.setLayout(null);
-				userSignupPanel.add(btnUserLogin);
-				userSignupPanel.add(labelSignup);
-				userSignupPanel.add(labelUsername);
-				userSignupPanel.add(labelPassword);
-				userSignupPanel.add(labelMobileNumber);
-				userSignupPanel.add(textfieldUsername);
-				userSignupPanel.add(textfieldMobileNumber);
-				userSignupPanel.add(passwordFieldUser);
-				userSignupPanel.add(btnUserSignup);
+				userSignupPanel.add(btnUserLoginPanel);
+				userSignupPanel.add(labelUserSignup);
+				userSignupPanel.add(labelSignupUsername);
+				userSignupPanel.add(labelSignupPassword);
+				userSignupPanel.add(labelSignupMobileNumber);
+				userSignupPanel.add(textfieldSignupUsername);
+				userSignupPanel.add(textfieldSignupMobileNumber);
+				userSignupPanel.add(passwordFieldSignupUser);
+				userSignupPanel.add(btnUserSignupAttempt);
 
 				// actions
-				btnUserLogin.addActionListener(new ActionListener(){
+				btnUserLoginPanel.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						// set content
+						System.out.println("user login panel");
 						frame.setContentPane(userLoginPanel);
+						frame.validate();
 					}
 					
 				});
 
-				btnUserSignup.addActionListener(new ActionListener(){
+				btnUserSignupAttempt.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
+						String signupUsername = textfieldSignupUsername.getText();
+						String signupMobileNo = textfieldSignupMobileNumber.getText();
+						String signupPassword = String.valueOf(passwordFieldSignupUser.getPassword());
 
-						// set content
-						frame.setContentPane(userLoginPanel);
+						System.out.println("Signup attempt: "+signupUsername+" " +signupMobileNo+" "+signupPassword);
+
+						// System.out.println(username + " " + mobileNo + " " + password);
+						if(signupUsername.equals("") || signupMobileNo.equals("") || signupPassword.equals("")){
+							// System.out.println("Please provide all information");
+							JOptionPane.showMessageDialog(null, "Please provide all the information", "Error", JOptionPane.ERROR_MESSAGE);
+						}else if(signupUsername.equals(users.getUserinfo(signupUsername)[1])){
+							// System.out.println("User Already Exists");
+							JOptionPane.showMessageDialog(null, "User already Exists", "Error", JOptionPane.ERROR_MESSAGE);
+						}else{
+							users.createUser(signupUsername, signupMobileNo, signupPassword);
+							// System.out.println("New User Created!");
+							JOptionPane.showMessageDialog(null, "Successfully Signed Up", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+							frame.setContentPane(userLoginPanel);
+						}
 					}
 					
 				});
@@ -263,88 +555,223 @@ public class GUI{
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// System.out.println("Admin");
-
+				System.out.println("Admin panel");
 				// elements
-				JLabel labelAdminLogin = new JLabel("Admin Login");
+				labelAdminLogin = new JLabel("Admin Login");
 				labelAdminLogin.setBounds(POSITION_X_LOGIN+100, POSITION_Y_LOGIN, 200, 60);
 				labelAdminLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
 				labelAdminLogin.setForeground(Color.RED);
 
-				JLabel labelAdminPassword = new JLabel("Root Password");
+				labelAdminPassword = new JLabel("Root Password");
 				labelAdminPassword.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
 				labelAdminPassword.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-				JPasswordField passwordFieldAdmin = new JPasswordField();
+				passwordFieldAdmin = new JPasswordField();
 				passwordFieldAdmin.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+100, 250, 30);
 				passwordFieldAdmin.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-				JButton btnAdminLogin = new JButton("Login");
-				btnAdminLogin.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+200, 100, 30);
-				btnAdminLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				btnAdminLogin.setForeground(Color.WHITE);
-				btnAdminLogin.setBackground(Color.RED);
-				btnAdminLogin.setOpaque(true);
-				btnAdminLogin.setFocusable(false);
-				btnAdminLogin.setBorderPainted(false);
-				btnAdminLogin.setFocusPainted(false);
+				btnAdminLoginAtttempt = new JButton("Login");
+				btnAdminLoginAtttempt.setBounds(POSITION_X_LOGIN+120, POSITION_Y_LOGIN+200, 100, 30);
+				btnAdminLoginAtttempt.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				btnAdminLoginAtttempt.setForeground(Color.WHITE);
+				btnAdminLoginAtttempt.setBackground(Color.RED);
+				btnAdminLoginAtttempt.setOpaque(true);
+				btnAdminLoginAtttempt.setFocusable(false);
+				btnAdminLoginAtttempt.setBorderPainted(false);
+				btnAdminLoginAtttempt.setFocusPainted(false);
 
-				JButton btnUser = new JButton("User");
-				btnUser.setBounds(25, 25, 100, 30);
-				btnUser.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-				btnUser.setForeground(Color.WHITE);
-				btnUser.setBackground(Color.BLACK);
-				btnUser.setOpaque(true);
-				btnUser.setFocusable(false);
-				btnUser.setBorderPainted(false);
-				btnUser.setFocusPainted(false);
+				btnAdminUser = new JButton("User");
+				btnAdminUser.setBounds(25, 25, 100, 30);
+				btnAdminUser.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+				btnAdminUser.setForeground(Color.WHITE);
+				btnAdminUser.setBackground(Color.BLACK);
+				btnAdminUser.setOpaque(true);
+				btnAdminUser.setFocusable(false);
+				btnAdminUser.setBorderPainted(false);
+				btnAdminUser.setFocusPainted(false);
 
 				// actions
-				btnAdminLogin.addActionListener(new ActionListener(){
+				btnAdminLoginAtttempt.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {	
-						// buttons
-						JButton btnLogout = new JButton("Logout");
-						btnLogout.setBounds(POSITION_X_USER, POSITION_Y_USER+SCREEN_HEIGHT-100, 100, 30);
-						btnLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-						btnLogout.setForeground(Color.WHITE);
-						btnLogout.setBackground(Color.RED);
-						btnLogout.setOpaque(true);
-						btnLogout.setFocusable(false);
-						btnLogout.setBorderPainted(false);
-						btnLogout.setFocusPainted(false);
-		
-						btnLogout.addActionListener(new ActionListener(){
-		
-							@Override
-							public void actionPerformed(ActionEvent arg0) {
-								// set content
-								frame.setContentPane(adminLoginPanel);
-							}
+						System.out.println("admin login attempt");
+						if(!String.valueOf(passwordFieldAdmin.getPassword()).equals(ROOT_PASSWORD)){
+							JOptionPane.showMessageDialog(null, "Password Doesn't Match", "Error", JOptionPane.ERROR_MESSAGE);
+						}else{
+							System.out.println("Admin panel");
 							
-						});
-		
-		
-						// panel
-						adminPanel = new JPanel();
-						adminPanel.setBackground(Color.WHITE);
-						adminPanel.setLayout(null);
-						adminPanel.add(btnLogout);
-						
-						// set content
-						frame.setContentPane(adminPanel);
-						frame.validate();				
+							// elements
+							labelAdminMarketHeader = new JLabel("MARKET");
+							labelAdminMarketHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+							labelAdminMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+							labelAdminControlHeader = new JLabel("CONTROL PANEL");
+							labelAdminControlHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+							labelAdminControlHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+							labelAdminAddItemsHeader = new JLabel("ADD NEW ITEMS");
+							labelAdminAddItemsHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+							labelAdminAddItemsHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+
+							
+							// buttons
+							btnAdminControl = new JButton("Control Panel");
+							btnAdminControl.setBounds(0, 100, 150, 50);
+							btnAdminControl.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+							btnAdminControl.setForeground(Color.WHITE);
+							btnAdminControl.setBackground(Color.RED);
+							btnAdminControl.setOpaque(true);
+							btnAdminControl.setFocusable(false);
+							btnAdminControl.setBorderPainted(false);
+							btnAdminControl.setFocusPainted(false);
+							btnAdminControl.setEnabled(true);
+							
+							btnAdminMarket = new JButton("Market");
+							btnAdminMarket.setBounds(0, 150, 150, 50);
+							btnAdminMarket.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+							btnAdminMarket.setForeground(Color.WHITE);
+							btnAdminMarket.setBackground(Color.RED);
+							btnAdminMarket.setOpaque(true);
+							btnAdminMarket.setFocusable(false);
+							btnAdminMarket.setBorderPainted(false);
+							btnAdminMarket.setFocusPainted(false);
+							btnAdminMarket.setEnabled(false);
+							
+							btnAdminAddItems = new JButton("+ Add Items");
+							btnAdminAddItems.setBounds(0, 200, 150, 50);
+							btnAdminAddItems.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+							btnAdminAddItems.setForeground(Color.WHITE);
+							btnAdminAddItems.setBackground(Color.RED);
+							btnAdminAddItems.setOpaque(true);
+							btnAdminAddItems.setFocusable(false);
+							btnAdminAddItems.setBorderPainted(false);
+							btnAdminAddItems.setFocusPainted(false);
+							btnAdminAddItems.setEnabled(true);
+
+							btnAdminLogout = new JButton("Logout");
+							btnAdminLogout.setBounds(0, SCREEN_HEIGHT-100, 150, 50);
+							btnAdminLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+							btnAdminLogout.setForeground(Color.WHITE);
+							btnAdminLogout.setBackground(Color.RED);
+							btnAdminLogout.setOpaque(true);
+							btnAdminLogout.setFocusable(false);
+							btnAdminLogout.setBorderPainted(false);
+							btnAdminLogout.setFocusPainted(false);
+
+							// panel
+							adminPanel = new JPanel();
+							adminPanel.setBackground(Color.WHITE);
+							adminPanel.setLayout(null);
+							adminPanel.add(labelAdminMarketHeader);
+							adminPanel.add(btnAdminControl);
+							adminPanel.add(btnAdminMarket);
+							adminPanel.add(btnAdminAddItems);
+							adminPanel.add(btnAdminLogout);
+
+							adminControlPanel = new JPanel();
+							adminControlPanel.setBackground(Color.WHITE);
+							adminControlPanel.setLayout(null);
+
+							adminAddItemsPanel = new JPanel();
+							adminAddItemsPanel.setBackground(Color.WHITE);
+							adminAddItemsPanel.setLayout(null);
+
+
+							// actions
+							btnAdminControl.addActionListener(new ActionListener(){
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									System.out.println("Admin control panel");
+									btnAdminMarket.setEnabled(true);
+									btnAdminControl.setEnabled(false);
+									btnAdminAddItems.setEnabled(true);
+
+									adminControlPanel.add(labelAdminControlHeader);
+									adminControlPanel.add(btnAdminControl);
+									adminControlPanel.add(btnAdminMarket);
+									adminControlPanel.add(btnAdminAddItems);
+									adminControlPanel.add(btnAdminLogout);
+									
+									frame.setContentPane(adminControlPanel);
+									frame.validate();
+								}
+							});
+
+							btnAdminMarket.addActionListener(new ActionListener(){
+
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									System.out.println("Admin market panel");
+
+									btnAdminMarket.setEnabled(false);
+									btnAdminControl.setEnabled(true);
+									btnAdminAddItems.setEnabled(true);
+
+									adminPanel.add(labelAdminMarketHeader);
+									adminPanel.add(btnAdminControl);
+									adminPanel.add(btnAdminMarket);
+									adminPanel.add(btnAdminAddItems);
+									adminPanel.add(btnAdminLogout);
+
+									frame.setContentPane(adminPanel);
+									frame.validate();
+								}
+								
+							});
+
+							btnAdminAddItems.addActionListener(new ActionListener(){
+
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									System.out.println("Admin add items panel");
+
+									btnAdminMarket.setEnabled(true);
+									btnAdminControl.setEnabled(true);
+									btnAdminAddItems.setEnabled(false);
+
+									adminAddItemsPanel.add(labelAdminAddItemsHeader);
+									adminAddItemsPanel.add(btnAdminControl);
+									adminAddItemsPanel.add(btnAdminMarket);
+									adminAddItemsPanel.add(btnAdminAddItems);
+									adminAddItemsPanel.add(btnAdminLogout);
+
+									frame.setContentPane(adminAddItemsPanel);
+									frame.validate();
+								}
+								
+							});
+
+							btnAdminLogout.addActionListener(new ActionListener(){
+			
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									System.out.println("Admin Logout attempt");
+									int answer = JOptionPane.showConfirmDialog(null, "Do you really want to signout?", "Confirm", JOptionPane.YES_NO_OPTION);
+									if(answer == 0){
+										System.out.println("Admin logging out...");
+										frame.setContentPane(adminLoginPanel);
+									}
+								}
+								
+							});							
+							
+							// set content
+							frame.setContentPane(adminPanel);
+							frame.validate();	
+						}
+			
 					}
 					
 				});
 
-				btnUser.addActionListener(new ActionListener(){
+				btnAdminUser.addActionListener(new ActionListener(){
 
 					@Override
 					public void actionPerformed(ActionEvent arg0) {
 						// set content
 						frame.setContentPane(userLoginPanel);
+						frame.validate();
 					}
 					
 				});
@@ -356,14 +783,27 @@ public class GUI{
 				adminLoginPanel.add(labelAdminLogin);
 				adminLoginPanel.add(labelAdminPassword);
 				adminLoginPanel.add(passwordFieldAdmin);
-				adminLoginPanel.add(btnAdminLogin);
-				adminLoginPanel.add(btnUser);
+				adminLoginPanel.add(btnAdminLoginAtttempt);
+				adminLoginPanel.add(btnAdminUser);
 
 				// set content
 				frame.setContentPane(adminLoginPanel);
 				frame.validate();
 			}
 			
+		});
+
+		// saves everything to files
+		frame.addWindowListener(new WindowAdapter(){
+			public void windowClosing(WindowEvent e){
+				// System.out.println("Window closing listener");
+				try {
+					System.out.println("Saving changes....");
+					users.saveUserinfo();
+				} catch (Exception e1) {
+					System.out.println(e1);
+				}
+			}
 		});
 		
 		// frame

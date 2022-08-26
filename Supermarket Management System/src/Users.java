@@ -54,6 +54,12 @@ public class Users {
         return userinfo;
     }
 
+    void editUserinfo(int userID, String username, String mobileNo, String password){
+        this.username[userID] = username;
+        this.mobileNo[userID] = mobileNo;
+        this.password[userID] = password;
+    }
+
     void saveUserinfo() throws Exception{
         File file = new File("Users.txt");
         

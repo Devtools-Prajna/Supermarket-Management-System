@@ -1,6 +1,10 @@
 public class Main {
 
 	public static void main(String[] args) {
-		new GUI();
+		try {
+			new GUI();			
+		} catch (Exception e) {
+			System.out.println(e);
+		}
 	}
 }
