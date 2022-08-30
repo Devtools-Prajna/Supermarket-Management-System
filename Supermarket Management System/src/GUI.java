@@ -1,14 +1,18 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 import javax.swing.*;
 
 public class GUI{
+	// constants
 	int SCREEN_WIDTH = 1000;
 	int SCREEN_HEIGHT = 600;
-	String FONT_DEFAULT = "proxima-nova";
 	int COLOR_GREENISH = 0x1BA466;
 	int COLOR_SKY_BLUE = 0x195ABE;
-	int FONT_HEADER_SIZE = 30;
+	int FONT_HEADER1_SIZE = 30;
+	int FONT_HEADER2_SIZE = 20;
 	int FONT_DEFAULT_SIZE = 15;
 	int POSITION_X_LOGIN = (SCREEN_WIDTH/2)-185;
 	int POSITION_Y_LOGIN = (SCREEN_HEIGHT/2)-150;
@@ -16,11 +20,20 @@ public class GUI{
 	int POSITION_Y_USER = 100;
 	int POSITION_X_CONTENT = 200;
 	int POSITION_Y_CONTENT = 200;
+	int arraySize = 100;
+	int length;
+	
+	String FRAME_TITLE = "Supermarket Management System V0.0";
 	String ROOT_PASSWORD = "root001";
+	String FONT_DEFAULT = "proxima-nova";
 
 	// objects
 	Users users;
 	Items items;
+	Orders orders;
+
+	// other objects
+	DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH:mm:ss");
 
 	// frame
 	JFrame frame;
@@ -36,13 +49,14 @@ public class GUI{
 	JPanel adminPanel;
 	JPanel adminControlPanel;
 	JPanel adminViewOrdersPanel;	
+
 	// labels
 	JLabel labelLogin;
 	JLabel labelUsername;
 	JLabel labelPassword;
 	JLabel labelProfileHeader;
-	JLabel labelMarketHeader;
-	JLabel labelOrdersHeader;
+	JLabel labelUserMarketHeader;
+	JLabel labelUserOrdersHeader;
 	JLabel labelProfileUsername;
 	JLabel labelProfileMobileNo;
 	JLabel labelProfilePassword;
@@ -50,6 +64,23 @@ public class GUI{
 	JLabel labelSignupUsername;
 	JLabel labelSignupMobileNumber;
 	JLabel labelSignupPassword;
+	JLabel labelUserMarketItemIDHeader;
+	JLabel labelUserMarketItemNameHeader;
+	JLabel labelUserMarketPricePerQuantityHeader;
+	JLabel[] labelUserMarketItemID;
+	JLabel[] labelUserMarketItemName;
+	JLabel[] labelUserMarketPricePerQuantity;
+	JLabel[] labelUserMarketPrice;
+	JLabel labelUserMarketQuantityHeader;
+	JLabel labelUserMarketPriceHeader;
+	JLabel labelUserMarketTotalPriceHeader;
+	JLabel labelUserMarketTotalPrice;
+	JLabel labelUserOrderIDHeader;
+	JLabel labelUserOrderDateHeader;
+	JLabel labelUserOrderTotalPriceHeader;
+	JLabel[] labelUserOrderID;
+	JLabel[] labelUserOrderDate;
+	JLabel[] labelUserOrderTotalPrice;
 
 	JLabel labelAdminLogin;
 	JLabel labelAdminPassword;
@@ -71,10 +102,22 @@ public class GUI{
 	JLabel[] labelAdminMarketPrice;
 	JLabel labelAdminMarketAddItemName;
 	JLabel labelAdminMarketAddPrice;
+	JLabel labelAdminOrderIDHeader;
+	JLabel labelAdminOrderDateHeader;
+	JLabel labelAdminOrderUsernameHeader;
+	JLabel labelAdminOrderTotalPriceHeader;
+	JLabel[] labelAdminOrderID;
+	JLabel[] labelAdminOrderDate;
+	JLabel[] labelAdminOrderUsername;
+	JLabel[] labelAdminOrderTotalPrice;
+
 
 	// checkbox
-	JCheckBox[] checkboxControl;
-	JCheckBox[] checkboxMarket;
+	JCheckBox[] checkboxUserOrders;
+
+	JCheckBox[] checkboxAdminControl;
+	JCheckBox[] checkboxAdminMarket;
+	JCheckBox[] checkboxAdminOrders;
 	
 	// textfields
 	JTextField textfieldUsername;
@@ -82,6 +125,7 @@ public class GUI{
 	JTextField textfieldEditMobileNo;
 	JTextField textfieldSignupUsername;
 	JTextField textfieldSignupMobileNumber;
+	JTextField[] textfieldUserMarketItemQuantity;
 
 	JTextField textfieldAdminMarketAddItemName;
 	JTextField textfieldAdminMarketAddPrice;
@@ -93,16 +137,19 @@ public class GUI{
 	JPasswordField passwordFieldAdmin;
 	
 	// buttons
-	JButton btnProfile;
+	JButton btnUserProfile;
 	JButton btnUserLoginAttempt;
 	JButton btnUserSignupPanel;
-	JButton btnMarket;
-	JButton btnOrders;
-	JButton btnLogout;
-	JButton btnDeleteAccount;
-	JButton btnSaveChanges;
+	JButton btnUserMarket;
+	JButton btnUserOrders;
+	JButton btnUserLogout;
+	JButton btnUserDeleteAccount;
+	JButton btnUserSaveChanges;
 	JButton btnUserLoginPanel;
 	JButton btnUserSignupAttempt;
+	JButton btnUserMarketPlaceOrder;
+	JButton btnUserMarketCalculate;
+	JButton btnUserOrderView;
 	
 	JButton btnAdmin;
 	JButton btnAdminLoginAtttempt;
@@ -114,11 +161,13 @@ public class GUI{
 	JButton btnAdminViewOrders;
 	JButton btnAdminMarketAdditem;
 	JButton btnAdminMarketDelete;
+	JButton btnAdminOrderView;
 
 	GUI() throws Exception{
 		// objects
 		users = new Users();
 		items = new Items();
+		orders = new Orders();
 
 		// frame
 		frame = new JFrame();
@@ -126,7 +175,7 @@ public class GUI{
 		// login label
 		labelLogin = new JLabel("LOGIN");
 		labelLogin.setBounds(POSITION_X_LOGIN+125, POSITION_Y_LOGIN, 120, 60);
-		labelLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+		labelLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 		
 		labelUsername = new JLabel("Username ");
 		labelUsername.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
@@ -200,7 +249,7 @@ public class GUI{
 
 				String[] userinfo = users.getUserinfo(textfieldUsername.getText());
 
-				if(textfieldUsername.getText().equals("") || String.valueOf(passwordFieldUser.getPassword()).equals("")){
+				if(users.illegalUserTextInput(textfieldUsername.getText()) || users.illegalUserTextInput(String.valueOf(passwordFieldUser.getPassword()))){
 					JOptionPane.showMessageDialog(null, "Please provide all the information", "Error", JOptionPane.ERROR_MESSAGE);
 				}else if(textfieldUsername.getText().equals(userinfo[1]) && String.valueOf(passwordFieldUser.getPassword()).equals(userinfo[3])){				
 					int userID = Integer.valueOf(userinfo[0]);
@@ -211,31 +260,49 @@ public class GUI{
 					System.out.println(username + " user panel");
 
 					// user market elements
-					labelMarketHeader = new JLabel("MARKET");
-					labelMarketHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
-					labelMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+					labelUserMarketHeader = new JLabel("MARKET");
+					labelUserMarketHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+					labelUserMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
-					labelAdminMarketItemIDHeader = new JLabel("Item ID");
-					labelAdminMarketItemIDHeader.setBounds(200, 200, 100, 30);
-					labelAdminMarketItemIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					labelUserMarketItemIDHeader = new JLabel("Item ID");
+					labelUserMarketItemIDHeader.setBounds(200, 150, 100, 30);
+					labelUserMarketItemIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-					labelAdminMarketItemNameHeader = new JLabel("Item Name");
-					labelAdminMarketItemNameHeader.setBounds(300, 200, 300, 30);
-					labelAdminMarketItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					labelUserMarketItemNameHeader = new JLabel("Item Name");
+					labelUserMarketItemNameHeader.setBounds(300, 150, 300, 30);
+					labelUserMarketItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-					labelAdminMarketPriceHeader = new JLabel("Price/Quantity");
-					labelAdminMarketPriceHeader.setBounds(600, 200, 100, 30);
-					labelAdminMarketPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					labelUserMarketPricePerQuantityHeader = new JLabel("Price/Quantity");
+					labelUserMarketPricePerQuantityHeader.setBounds(450, 150, 100, 30);
+					labelUserMarketPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-					checkboxMarket = new JCheckBox[100];
-					labelAdminMarketItemID = new JLabel[100];
-					labelAdminMarketItemName = new JLabel[100];
-					labelAdminMarketPrice = new JLabel[100];
+					labelUserMarketQuantityHeader = new JLabel("Quantity");
+					labelUserMarketQuantityHeader.setBounds(600, 150, 100, 30);
+					labelUserMarketQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelUserMarketPriceHeader = new JLabel("Price");
+					labelUserMarketPriceHeader.setBounds(700, 150, 100, 30);
+					labelUserMarketPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelUserMarketTotalPriceHeader = new JLabel("Total Price");
+					labelUserMarketTotalPriceHeader.setBounds(600, SCREEN_HEIGHT-100, 100, 30);
+					labelUserMarketTotalPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelUserMarketTotalPrice = new JLabel("0.0");
+					labelUserMarketTotalPrice.setBounds(700, SCREEN_HEIGHT-100, 100, 30);
+					labelUserMarketTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
+
+					textfieldUserMarketItemQuantity = new JTextField[arraySize];
+
+					labelUserMarketItemID = new JLabel[arraySize];
+					labelUserMarketItemName = new JLabel[arraySize];
+					labelUserMarketPricePerQuantity = new JLabel[arraySize];
+					labelUserMarketPrice = new JLabel[arraySize];
 
 					// user profile elements
 					labelProfileHeader = new JLabel("PROFILE");
 					labelProfileHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
-					labelProfileHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+					labelProfileHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
 					labelProfileUsername = new JLabel("Username");
 					labelProfileUsername.setBounds(POSITION_X_USER, POSITION_Y_USER+100, 200, 30);
@@ -265,101 +332,227 @@ public class GUI{
 					passfieldEditPassword.setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 					// user orders elements
-					labelOrdersHeader = new JLabel("ORDERS");
-					labelOrdersHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
-					labelOrdersHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+					labelUserOrdersHeader = new JLabel("ORDERS");
+					labelUserOrdersHeader.setBounds(POSITION_X_USER, POSITION_Y_USER, 400, 30);
+					labelUserOrdersHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
-					// buttons
-					btnProfile = new JButton("Profile");
-					btnProfile.setBounds(0, 100, 150, 50);
-					btnProfile.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnProfile.setForeground(Color.WHITE);
-					btnProfile.setBackground(Color.BLACK);
-					btnProfile.setOpaque(true);
-					btnProfile.setFocusable(false);
-					btnProfile.setBorderPainted(false);
-					btnProfile.setFocusPainted(false);
-					btnProfile.setEnabled(true);
+					labelUserOrderIDHeader = new JLabel("Order ID");
+					labelUserOrderIDHeader.setBounds(200, 150, 100, 30);
+					labelUserOrderIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelUserOrderDateHeader = new JLabel("Order Date");
+					labelUserOrderDateHeader.setBounds(300, 150, 300, 30);
+					labelUserOrderDateHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					labelUserOrderTotalPriceHeader = new JLabel("Total Price");
+					labelUserOrderTotalPriceHeader.setBounds(600, 150, 100, 30);
+					labelUserOrderTotalPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+					checkboxUserOrders = new JCheckBox[arraySize];
+					labelUserOrderID = new JLabel[arraySize];
+					labelUserOrderDate = new JLabel[arraySize];
+					labelUserOrderTotalPrice = new JLabel[arraySize];
+
+					// user profile buttons
+					btnUserProfile = new JButton("Profile");
+					btnUserProfile.setBounds(0, 100, 150, 50);
+					btnUserProfile.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserProfile.setForeground(Color.WHITE);
+					btnUserProfile.setBackground(Color.BLACK);
+					btnUserProfile.setOpaque(true);
+					btnUserProfile.setFocusable(false);
+					btnUserProfile.setBorderPainted(false);
+					btnUserProfile.setFocusPainted(false);
+					btnUserProfile.setEnabled(true);
 					
-					btnMarket = new JButton("Market");
-					btnMarket.setBounds(0, 150, 150, 50);
-					btnMarket.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnMarket.setForeground(Color.WHITE);
-					btnMarket.setBackground(Color.BLACK);
-					btnMarket.setOpaque(true);
-					btnMarket.setFocusable(false);
-					btnMarket.setBorderPainted(false);
-					btnMarket.setFocusPainted(false);
-					btnMarket.setEnabled(false);
-					
-					btnOrders = new JButton("Orders");
-					btnOrders.setBounds(0, 200, 150, 50);
-					btnOrders.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnOrders.setForeground(Color.WHITE);
-					btnOrders.setBackground(Color.BLACK);
-					btnOrders.setOpaque(true);
-					btnOrders.setFocusable(false);
-					btnOrders.setBorderPainted(false);
-					btnOrders.setFocusPainted(false);
-					btnOrders.setEnabled(true);
+					btnUserDeleteAccount = new JButton("Delete Account");
+					btnUserDeleteAccount.setBounds(SCREEN_WIDTH-340, SCREEN_HEIGHT-100, 150, 50);
+					btnUserDeleteAccount.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserDeleteAccount.setForeground(Color.WHITE);
+					btnUserDeleteAccount.setBackground(Color.BLACK);
+					btnUserDeleteAccount.setOpaque(true);
+					btnUserDeleteAccount.setFocusable(false);
+					btnUserDeleteAccount.setBorderPainted(false);
+					btnUserDeleteAccount.setFocusPainted(false);
 
-					btnDeleteAccount = new JButton("Delete Account");
-					btnDeleteAccount.setBounds(SCREEN_WIDTH-340, SCREEN_HEIGHT-100, 150, 50);
-					btnDeleteAccount.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnDeleteAccount.setForeground(Color.WHITE);
-					btnDeleteAccount.setBackground(Color.BLACK);
-					btnDeleteAccount.setOpaque(true);
-					btnDeleteAccount.setFocusable(false);
-					btnDeleteAccount.setBorderPainted(false);
-					btnDeleteAccount.setFocusPainted(false);
+					btnUserSaveChanges = new JButton("Save Changes");
+					btnUserSaveChanges.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
+					btnUserSaveChanges.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserSaveChanges.setForeground(Color.WHITE);
+					btnUserSaveChanges.setBackground(Color.BLACK);
+					btnUserSaveChanges.setOpaque(true);
+					btnUserSaveChanges.setFocusable(false);
+					btnUserSaveChanges.setBorderPainted(false);
+					btnUserSaveChanges.setFocusPainted(false);
 
-					btnSaveChanges = new JButton("Save Changes");
-					btnSaveChanges.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
-					btnSaveChanges.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnSaveChanges.setForeground(Color.WHITE);
-					btnSaveChanges.setBackground(Color.BLACK);
-					btnSaveChanges.setOpaque(true);
-					btnSaveChanges.setFocusable(false);
-					btnSaveChanges.setBorderPainted(false);
-					btnSaveChanges.setFocusPainted(false);
-					
-					btnLogout = new JButton("Logout");
-					btnLogout.setBounds(0, SCREEN_HEIGHT-100, 150, 50);
-					btnLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
-					btnLogout.setForeground(Color.WHITE);
-					btnLogout.setBackground(Color.BLACK);
-					btnLogout.setOpaque(true);
-					btnLogout.setFocusable(false);
-					btnLogout.setBorderPainted(false);
-					btnLogout.setFocusPainted(false);
+					// user market buttons
+					btnUserMarket = new JButton("Market");
+					btnUserMarket.setBounds(0, 150, 150, 50);
+					btnUserMarket.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserMarket.setForeground(Color.WHITE);
+					btnUserMarket.setBackground(Color.BLACK);
+					btnUserMarket.setOpaque(true);
+					btnUserMarket.setFocusable(false);
+					btnUserMarket.setBorderPainted(false);
+					btnUserMarket.setFocusPainted(false);
+					btnUserMarket.setEnabled(false);
 
-					// panel
+					btnUserMarketPlaceOrder = new JButton("Place Order");
+					btnUserMarketPlaceOrder.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
+					btnUserMarketPlaceOrder.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserMarketPlaceOrder.setForeground(Color.WHITE);
+					btnUserMarketPlaceOrder.setBackground(Color.BLACK);
+					btnUserMarketPlaceOrder.setOpaque(true);
+					btnUserMarketPlaceOrder.setFocusable(false);
+					btnUserMarketPlaceOrder.setBorderPainted(false);
+					btnUserMarketPlaceOrder.setFocusPainted(false);
+					btnUserMarketPlaceOrder.setEnabled(false);
+
+					btnUserMarketCalculate = new JButton("Calculate");
+					btnUserMarketCalculate.setBounds(170, SCREEN_HEIGHT-100, 150, 50);
+					btnUserMarketCalculate.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserMarketCalculate.setForeground(Color.WHITE);
+					btnUserMarketCalculate.setBackground(Color.BLACK);
+					btnUserMarketCalculate.setOpaque(true);
+					btnUserMarketCalculate.setFocusable(false);
+					btnUserMarketCalculate.setBorderPainted(false);
+					btnUserMarketCalculate.setFocusPainted(false);
+
+					// user orders buttons
+					btnUserOrders = new JButton("Orders");
+					btnUserOrders.setBounds(0, 200, 150, 50);
+					btnUserOrders.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserOrders.setForeground(Color.WHITE);
+					btnUserOrders.setBackground(Color.BLACK);
+					btnUserOrders.setOpaque(true);
+					btnUserOrders.setFocusable(false);
+					btnUserOrders.setBorderPainted(false);
+					btnUserOrders.setFocusPainted(false);
+					btnUserOrders.setEnabled(true);
+
+					btnUserOrderView = new JButton("View");
+					btnUserOrderView.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
+					btnUserOrderView.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserOrderView.setForeground(Color.WHITE);
+					btnUserOrderView.setBackground(Color.BLACK);
+					btnUserOrderView.setOpaque(true);
+					btnUserOrderView.setFocusable(false);
+					btnUserOrderView.setBorderPainted(false);
+					btnUserOrderView.setFocusPainted(false);
+
+					// user logout button
+					btnUserLogout = new JButton("Logout");
+					btnUserLogout.setBounds(0, SCREEN_HEIGHT-100, 150, 50);
+					btnUserLogout.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+					btnUserLogout.setForeground(Color.WHITE);
+					btnUserLogout.setBackground(Color.BLACK);
+					btnUserLogout.setOpaque(true);
+					btnUserLogout.setFocusable(false);
+					btnUserLogout.setBorderPainted(false);
+					btnUserLogout.setFocusPainted(false);
+
+					// user market panel
 					userPanel = new JPanel();
 					userPanel.setBackground(Color.WHITE);
 					userPanel.setLayout(null);
-					userPanel.add(btnProfile);
-					userPanel.add(btnMarket);
-					userPanel.add(btnOrders);
-					userPanel.add(btnLogout);
-					userPanel.add(labelMarketHeader);
+					userPanel.add(btnUserProfile);
+					userPanel.add(btnUserMarket);
+					userPanel.add(btnUserOrders);
+					userPanel.add(btnUserLogout);
+					userPanel.add(labelUserMarketHeader);
+					userPanel.add(labelUserMarketItemIDHeader);
+					userPanel.add(labelUserMarketItemNameHeader);
+					userPanel.add(labelUserMarketPricePerQuantityHeader);
+					userPanel.add(btnUserMarketPlaceOrder);
+					userPanel.add(labelUserMarketQuantityHeader);
+					userPanel.add(labelUserMarketPriceHeader);
+					userPanel.add(btnUserMarketCalculate);
+					userPanel.add(labelUserMarketTotalPriceHeader);
+					userPanel.add(labelUserMarketTotalPrice);
+					
+					for(int i=0; i<=items.newItemID; i++){
+						labelUserMarketItemID[i] = new JLabel(String.valueOf(i));
+						labelUserMarketItemID[i].setBounds(200, (150+30*(i+1)), 100, 30);
+						labelUserMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
+						labelUserMarketItemName[i] = new JLabel(items.itemName[i]);
+						labelUserMarketItemName[i].setBounds(300, (150+30*(i+1)), 100, 30);
+						labelUserMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+						labelUserMarketPricePerQuantity[i] = new JLabel(String.valueOf(items.price[i]));
+						labelUserMarketPricePerQuantity[i].setBounds(450, (150+30*(i+1)), 100, 30);
+						labelUserMarketPricePerQuantity[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+						textfieldUserMarketItemQuantity[i] = new JTextField();
+						textfieldUserMarketItemQuantity[i].setText("0");
+						textfieldUserMarketItemQuantity[i].setBounds(600, (150+30*(i+1)), 50, 30);
+						textfieldUserMarketItemQuantity[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+						labelUserMarketPrice[i] = new JLabel();
+						labelUserMarketPrice[i].setText("0.0");
+						labelUserMarketPrice[i].setBounds(700, (150+30*(i+1)), 50, 30);
+						labelUserMarketPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));						
+
+						userPanel.add(labelUserMarketItemID[i]);
+						userPanel.add(labelUserMarketItemName[i]);
+						userPanel.add(labelUserMarketPricePerQuantity[i]);
+						userPanel.add(textfieldUserMarketItemQuantity[i]);
+						userPanel.add(labelUserMarketPrice[i]);
+					}
+
+					// user profile panel
 					userProfilePanel = new JPanel();
 					userProfilePanel.setBackground(Color.WHITE);
 					userProfilePanel.setLayout(null);
 
+					// user order panel
 					userOrdersPanel = new JPanel();
 					userOrdersPanel.setBackground(Color.WHITE);
 					userOrdersPanel.setLayout(null);
+					userOrdersPanel.add(labelUserOrderIDHeader);
+					userOrdersPanel.add(labelUserOrderDateHeader);
+					userOrdersPanel.add(labelUserOrderTotalPriceHeader);
+					userOrdersPanel.add(btnUserOrderView);
 
+					for(int i=0, j=0; i<=orders.newOrderID; i++){
+						if(orders.username[i].equals(username)){
+							checkboxUserOrders[j] = new JCheckBox();
+							checkboxUserOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
+							checkboxUserOrders[j].setBackground(Color.WHITE);
+							checkboxUserOrders[j].setFocusable(false);
 
-					// actions
-					btnProfile.addActionListener(new ActionListener(){
+							labelUserOrderID[j] = new JLabel(String.valueOf(i));
+							labelUserOrderID[j].setBounds(200, (150+30*(j+1)), 100, 30);
+							labelUserOrderID[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+							labelUserOrderDate[j] = new JLabel(orders.date[i]);
+							labelUserOrderDate[j].setBounds(300, (150+30*(j+1)), 300, 30);
+							labelUserOrderDate[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+							labelUserOrderTotalPrice[j] = new JLabel(String.valueOf(orders.totalPrice[i]));
+							labelUserOrderTotalPrice[j].setBounds(600, (150+30*(j+1)), 100, 30);
+							labelUserOrderTotalPrice[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+							userOrdersPanel.add(checkboxUserOrders[j]);
+							userOrdersPanel.add(labelUserOrderID[j]);
+							userOrdersPanel.add(labelUserOrderDate[j]);
+							userOrdersPanel.add(labelUserOrderTotalPrice[j]);
+							j++;
+						}
+					}
+
+					// user temp panel
+					JPanel tempPanel = new JPanel();
+					tempPanel.setLayout(null);
+
+					// action user profile
+					btnUserProfile.addActionListener(new ActionListener(){
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
 							System.out.println(username + "User Profile panel");
-							btnMarket.setEnabled(true);
-							btnProfile.setEnabled(false);
-							btnOrders.setEnabled(true);
+							btnUserMarket.setEnabled(true);
+							btnUserProfile.setEnabled(false);
+							btnUserOrders.setEnabled(true);
 
 							userProfilePanel.add(labelProfileHeader);
 							userProfilePanel.add(labelProfileUsername);
@@ -368,63 +561,19 @@ public class GUI{
 							userProfilePanel.add(textfieldEditMobileNo);
 							userProfilePanel.add(labelProfilePassword);
 							userProfilePanel.add(passfieldEditPassword);
-							userProfilePanel.add(btnProfile);
-							userProfilePanel.add(btnMarket);
-							userProfilePanel.add(btnOrders);
-							userProfilePanel.add(btnLogout);
-							userProfilePanel.add(btnSaveChanges);
-							userProfilePanel.add(btnDeleteAccount);
+							userProfilePanel.add(btnUserProfile);
+							userProfilePanel.add(btnUserMarket);
+							userProfilePanel.add(btnUserOrders);
+							userProfilePanel.add(btnUserLogout);
+							userProfilePanel.add(btnUserSaveChanges);
+							userProfilePanel.add(btnUserDeleteAccount);
 
 							frame.setContentPane(userProfilePanel);
 							frame.validate();
 						}
 					});
 
-					btnMarket.addActionListener(new ActionListener(){
-
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							System.out.println(username + " User Market panel");
-
-							btnMarket.setEnabled(false);
-							btnProfile.setEnabled(true);
-							btnOrders.setEnabled(true);
-							
-							userPanel.add(btnProfile);
-							userPanel.add(btnMarket);
-							userPanel.add(btnOrders);
-							userPanel.add(btnLogout);
-							userPanel.add(labelMarketHeader);
-
-							frame.setContentPane(userPanel);
-							frame.validate();
-						}
-						
-					});
-
-					btnOrders.addActionListener(new ActionListener(){
-
-						@Override
-						public void actionPerformed(ActionEvent arg0) {
-							System.out.println(username + " order panel");
-
-							btnMarket.setEnabled(true);
-							btnProfile.setEnabled(true);
-							btnOrders.setEnabled(false);
-
-							userOrdersPanel.add(btnProfile);
-							userOrdersPanel.add(btnMarket);
-							userOrdersPanel.add(btnOrders);
-							userOrdersPanel.add(btnLogout);
-							userOrdersPanel.add(labelOrdersHeader);
-
-							frame.setContentPane(userOrdersPanel);
-							frame.validate();
-						}
-						
-					});
-					
-					btnDeleteAccount.addActionListener(new ActionListener(){
+					btnUserDeleteAccount.addActionListener(new ActionListener(){
 
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
@@ -449,7 +598,7 @@ public class GUI{
 						
 					});
 
-					btnSaveChanges.addActionListener(new ActionListener(){
+					btnUserSaveChanges.addActionListener(new ActionListener(){
 
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
@@ -465,7 +614,280 @@ public class GUI{
 						
 					});
 
-					btnLogout.addActionListener(new ActionListener(){
+					// action user market
+					btnUserMarket.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							System.out.println(username + " User Market panel");
+
+							btnUserMarket.setEnabled(false);
+							btnUserProfile.setEnabled(true);
+							btnUserOrders.setEnabled(true);
+							
+							userPanel.add(btnUserProfile);
+							userPanel.add(btnUserMarket);
+							userPanel.add(btnUserOrders);
+							userPanel.add(btnUserLogout);
+							userPanel.add(labelUserMarketHeader);
+
+							frame.setContentPane(userPanel);
+							frame.validate();
+						}
+						
+					});
+
+					btnUserMarketCalculate.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							try{
+								System.out.println(username + " calculate price");
+								Double totalPrice = 0.0;
+
+								for(int i=0; i<=items.newItemID; i++){
+									Double price = Double.valueOf(labelUserMarketPricePerQuantity[i].getText()) * Double.valueOf(textfieldUserMarketItemQuantity[i].getText());
+									labelUserMarketPrice[i].setText(String.valueOf(price));
+									totalPrice += price;
+								}
+
+								System.out.println(username + " Total price: " + totalPrice);
+								labelUserMarketTotalPrice.setText(String.valueOf(totalPrice));
+
+								if(totalPrice == 0.0){
+									btnUserMarketPlaceOrder.setEnabled(false);
+								}else{
+									btnUserMarketPlaceOrder.setEnabled(true);
+								}
+							}catch(Exception e){
+								System.out.println(e);
+							}
+						}
+
+					});
+					
+					btnUserMarketPlaceOrder.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							try{
+								for(int i=0, j=0; i<=orders.newOrderID; i++){
+									if(orders.username[i].equals(username)){
+										tempPanel.add(checkboxUserOrders[j]);
+										tempPanel.add(labelUserOrderID[j]);
+										tempPanel.add(labelUserOrderDate[j]);
+										tempPanel.add(labelUserOrderTotalPrice[j]);
+										j++;
+									}
+								}
+
+								LocalDateTime now = LocalDateTime.now();
+								String date = String.valueOf(dtf.format(now));
+								String itemsName = "";
+								String itemsPricePerQuantity = "";
+								String itemsQuantity = "";
+								double totalPrice = Double.valueOf(labelUserMarketTotalPrice.getText());
+								
+								System.out.println(username + " Placed order: " + dtf.format(now) + " " + username + " " + totalPrice);
+
+								for(int i=0; i<=items.newItemID; i++){
+									itemsName += items.itemName[i];
+									itemsPricePerQuantity += items.price[i];
+									itemsQuantity += String.valueOf(Integer.valueOf(textfieldUserMarketItemQuantity[i].getText()));
+
+									if(i != items.newItemID){
+										itemsName += "-";
+										itemsPricePerQuantity += "-";
+										itemsQuantity += "-";
+									}
+								}
+
+								orders.createOrder(date, username, itemsName, itemsPricePerQuantity, itemsQuantity, totalPrice);
+								try {
+									System.out.println("Saving orderinfo....");
+									orders.saveOrderInfo();
+									orders = new Orders();
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+
+								JOptionPane.showMessageDialog(null, "Successfully placed your order!", "Confirm", JOptionPane.INFORMATION_MESSAGE);
+								btnUserMarketPlaceOrder.setEnabled(false);
+
+								for(int i=0, j=0; i<=orders.newOrderID; i++){
+									if(orders.username[i].equals(username)){
+										checkboxUserOrders[j] = new JCheckBox();
+										checkboxUserOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
+										checkboxUserOrders[j].setBackground(Color.WHITE);
+										checkboxUserOrders[j].setFocusable(false);
+			
+										labelUserOrderID[j] = new JLabel(String.valueOf(i));
+										labelUserOrderID[j].setBounds(200, (150+30*(j+1)), 100, 30);
+										labelUserOrderID[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+			
+										labelUserOrderDate[j] = new JLabel(orders.date[i]);
+										labelUserOrderDate[j].setBounds(300, (150+30*(j+1)), 300, 30);
+										labelUserOrderDate[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+			
+										labelUserOrderTotalPrice[j] = new JLabel(String.valueOf(orders.totalPrice[i]));
+										labelUserOrderTotalPrice[j].setBounds(600, (150+30*(j+1)), 100, 30);
+										labelUserOrderTotalPrice[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+			
+										userOrdersPanel.add(checkboxUserOrders[j]);
+										userOrdersPanel.add(labelUserOrderID[j]);
+										userOrdersPanel.add(labelUserOrderDate[j]);
+										userOrdersPanel.add(labelUserOrderTotalPrice[j]);
+										j++;
+									}
+
+
+								}
+							}catch(Exception e){
+								System.out.println(e);
+							}
+
+						}
+						
+					});
+
+					// action user orders
+					btnUserOrders.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							System.out.println(username + " order panel");
+
+							btnUserMarket.setEnabled(true);
+							btnUserProfile.setEnabled(true);
+							btnUserOrders.setEnabled(false);
+
+							userOrdersPanel.add(btnUserProfile);
+							userOrdersPanel.add(btnUserMarket);
+							userOrdersPanel.add(btnUserOrders);
+							userOrdersPanel.add(btnUserLogout);
+							userOrdersPanel.add(labelUserOrdersHeader);
+
+							frame.setContentPane(userOrdersPanel);
+							frame.validate();
+						}
+						
+					});
+					
+					btnUserOrderView.addActionListener(new ActionListener(){
+
+						@Override
+						public void actionPerformed(ActionEvent arg0) {
+							for(int i=0; i<=orders.newOrderID; i++){
+								if(checkboxUserOrders[i].isSelected()){
+									JFrame frameViewOrder = new JFrame();
+
+									JLabel labelDate = new JLabel("Date: " + orders.date[i]);
+									labelDate.setBounds(100, 50, 400, 50);
+									labelDate.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
+									
+									JLabel labelUsername = new JLabel("Username: " + orders.username[i]);
+									labelUsername.setBounds(100, 100, 400, 50);
+									labelUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
+
+									JLabel labelItemIDHeader = new JLabel("Item ID");
+									labelItemIDHeader.setBounds(100, 150, 100, 30);
+									labelItemIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									JLabel labelItemNameHeader = new JLabel("Item Name");
+									labelItemNameHeader.setBounds(200, 150, 300, 30);
+									labelItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									JLabel labelPricePerQuantityHeader = new JLabel("Price/Quantity");
+									labelPricePerQuantityHeader.setBounds(350, 150, 100, 30);
+									labelPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									JLabel labelQuantityHeader = new JLabel("Quantity");
+									labelQuantityHeader.setBounds(500, 150, 100, 30);
+									labelQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									JLabel labelPriceHeader = new JLabel("Price");
+									labelPriceHeader.setBounds(600, 150, 100, 30);
+									labelPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									JLabel[] labelItemID = new JLabel[arraySize];
+									JLabel[] labelItemName = new JLabel[arraySize];
+									JLabel[] labelItemPricePerQuantity = new JLabel[arraySize];
+									JLabel[] labelItemQuantity = new JLabel[arraySize];
+									JLabel[] labelItemPrice = new JLabel[arraySize];
+
+									JLabel labelTotalPrice = new JLabel("Total Price: " + orders.totalPrice[i]);
+									labelTotalPrice.setBounds(500, SCREEN_HEIGHT-100, 300, 30);
+									labelTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+									String[] arrayItemsName = orders.itemsName[i].split("-");
+									String[] arrayItemsPricePerQuantity = orders.itemsPricePerQuantity[i].split("-");
+									String[] arrayItemsQuantity = orders.itemsQuantity[i].split("-");
+
+									// panel
+									JPanel viewOrderPanel = new JPanel();
+									viewOrderPanel.setBackground(Color.WHITE);
+									viewOrderPanel.setLayout(null);	
+									viewOrderPanel.add(labelDate);
+									viewOrderPanel.add(labelUsername);
+									viewOrderPanel.add(labelTotalPrice);
+									viewOrderPanel.add(labelPriceHeader);
+									viewOrderPanel.add(labelQuantityHeader);
+									viewOrderPanel.add(labelPricePerQuantityHeader);
+									viewOrderPanel.add(labelItemNameHeader);
+									viewOrderPanel.add(labelItemIDHeader);
+
+									try{
+										for(int k=0; k<=items.newItemID; k++){
+											labelItemID[k] = new JLabel(String.valueOf(k));
+											labelItemID[k].setBounds(100, 150+30*(k+1), 100, 30);
+											labelItemID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+											System.out.println(arrayItemsName[k] + " " + arrayItemsPricePerQuantity[k] + "-" + arrayItemsQuantity[k]);
+
+											labelItemName[k] = new JLabel(arrayItemsName[k]);
+											labelItemName[k].setBounds(200, 150+30*(k+1), 100, 30);
+											labelItemName[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+											labelItemPricePerQuantity[k] = new JLabel(arrayItemsPricePerQuantity[k]);
+											labelItemPricePerQuantity[k].setBounds(350, 150+30*(k+1), 100, 30);
+											labelItemPricePerQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+											labelItemQuantity[k] = new JLabel(arrayItemsQuantity[k]);
+											labelItemQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
+											labelItemQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+											labelItemPrice[k] = new JLabel(String.valueOf(Double.valueOf(arrayItemsPricePerQuantity[k]) * Double.valueOf(arrayItemsQuantity[k])));
+											labelItemPrice[k].setBounds(600, 150+30*(k+1), 100, 30);
+											labelItemPrice[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+		
+											viewOrderPanel.add(labelItemID[k]);
+											viewOrderPanel.add(labelItemName[k]);
+											viewOrderPanel.add(labelItemPricePerQuantity[k]);
+											viewOrderPanel.add(labelItemQuantity[k]);
+											viewOrderPanel.add(labelItemPrice[k]);
+										}
+									}catch(Exception e){
+										System.out.println(e);
+									}
+
+									// frame
+									frameViewOrder.setContentPane(viewOrderPanel);
+									frameViewOrder.setTitle(orders.date[i] + " " + orders.username[i]);
+									frameViewOrder.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+									frameViewOrder.setResizable(false);
+									frameViewOrder.setLocationRelativeTo(null);
+									frameViewOrder.setVisible(true);
+									frameViewOrder.setLayout(null);
+									break;
+								}
+							}
+						}
+						
+					});
+					
+					
+					btnUserLogout.addActionListener(new ActionListener(){
 
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
@@ -508,7 +930,7 @@ public class GUI{
 
 				labelUserSignup = new JLabel("Signup");
 				labelUserSignup.setBounds(POSITION_X_LOGIN+125, POSITION_Y_LOGIN, 120, 60);
-				labelUserSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+				labelUserSignup.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 				
 				labelSignupUsername = new JLabel("Username ");
 				labelSignupUsername.setBounds(POSITION_X_LOGIN, POSITION_Y_LOGIN+100, 120, 30);
@@ -614,7 +1036,7 @@ public class GUI{
 				// elements
 				labelAdminLogin = new JLabel("Admin Login");
 				labelAdminLogin.setBounds(POSITION_X_LOGIN+100, POSITION_Y_LOGIN, 200, 60);
-				labelAdminLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+				labelAdminLogin.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 				labelAdminLogin.setForeground(Color.RED);
 
 				labelAdminPassword = new JLabel("Root Password");
@@ -659,7 +1081,7 @@ public class GUI{
 							// control labels
 							labelAdminControlHeader = new JLabel("CONTROL PANEL");
 							labelAdminControlHeader.setBounds(200, 100, 400, 30);
-							labelAdminControlHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+							labelAdminControlHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
 							labelAdminControlUserIDHeader = new JLabel("User ID");
 							labelAdminControlUserIDHeader.setBounds(200, 150, 100, 30);
@@ -673,15 +1095,15 @@ public class GUI{
 							labelAdminControlMobileNoHeader.setBounds(600, 150, 100, 30);
 							labelAdminControlMobileNoHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-							checkboxControl = new JCheckBox[100];
-							labelAdminControlUserID = new JLabel[100];
-							labelAdminControlUsername = new JLabel[100];
-							labelAdminControlMobileNo = new JLabel[100];
+							checkboxAdminControl = new JCheckBox[arraySize];
+							labelAdminControlUserID = new JLabel[arraySize];
+							labelAdminControlUsername = new JLabel[arraySize];
+							labelAdminControlMobileNo = new JLabel[arraySize];
 
 							// market labels
 							labelAdminMarketHeader = new JLabel("MARKET");
 							labelAdminMarketHeader.setBounds(200, 100, 400, 30);
-							labelAdminMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+							labelAdminMarketHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
 							// element add items
 							labelAdminMarketAddItemName = new JLabel("Item Name");
@@ -713,21 +1135,43 @@ public class GUI{
 							labelAdminMarketPriceHeader.setBounds(600, 200, 100, 30);
 							labelAdminMarketPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-							checkboxMarket = new JCheckBox[100];
-							labelAdminMarketItemID = new JLabel[100];
-							labelAdminMarketItemName = new JLabel[100];
-							labelAdminMarketPrice = new JLabel[100];
+							checkboxAdminMarket = new JCheckBox[arraySize];
+							labelAdminMarketItemID = new JLabel[arraySize];
+							labelAdminMarketItemName = new JLabel[arraySize];
+							labelAdminMarketPrice = new JLabel[arraySize];
 
 
 							// view orders labels
 							labelAdminViewOrdersHeader = new JLabel("VIEW ORDERS");
 							labelAdminViewOrdersHeader.setBounds(200, 100, 400, 30);
-							labelAdminViewOrdersHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+							labelAdminViewOrdersHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
+
+							labelAdminOrderIDHeader = new JLabel("Order ID");
+							labelAdminOrderIDHeader.setBounds(200, 150, 100, 30);
+							labelAdminOrderIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+							labelAdminOrderDateHeader = new JLabel("Order Date");
+							labelAdminOrderDateHeader.setBounds(300, 150, 300, 30);
+							labelAdminOrderDateHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+							labelAdminOrderUsernameHeader = new JLabel("Username");
+							labelAdminOrderUsernameHeader.setBounds(600, 150, 100, 30);
+							labelAdminOrderUsernameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+							labelAdminOrderTotalPriceHeader = new JLabel("Total Price");
+							labelAdminOrderTotalPriceHeader.setBounds(800, 150, 100, 30);
+							labelAdminOrderTotalPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+							checkboxAdminOrders = new JCheckBox[arraySize];
+							labelAdminOrderID = new JLabel[arraySize];
+							labelAdminOrderDate = new JLabel[arraySize];
+							labelAdminOrderUsername = new JLabel[arraySize];
+							labelAdminOrderTotalPrice = new JLabel[arraySize];
 
 							// add new items labels
 							labelAdminAddItemsHeader = new JLabel("ADD NEW ITEMS");
 							labelAdminAddItemsHeader.setBounds(200, 100, 400, 30);
-							labelAdminAddItemsHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER_SIZE));
+							labelAdminAddItemsHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER1_SIZE));
 
 							// admin conrtol buttons
 							btnAdminControl = new JButton("Control Panel");
@@ -783,7 +1227,7 @@ public class GUI{
 							btnAdminMarketDelete.setBorderPainted(false);
 							btnAdminMarketDelete.setFocusPainted(false);
 							
-							// admin view order buttons
+							// buttons admin view order 
 							btnAdminViewOrders = new JButton("View Orders");
 							btnAdminViewOrders.setBounds(0, 200, 150, 50);
 							btnAdminViewOrders.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
@@ -794,6 +1238,16 @@ public class GUI{
 							btnAdminViewOrders.setBorderPainted(false);
 							btnAdminViewOrders.setFocusPainted(false);
 							btnAdminViewOrders.setEnabled(true);
+
+							btnAdminOrderView = new JButton("View");
+							btnAdminOrderView.setBounds(SCREEN_WIDTH-170, SCREEN_HEIGHT-100, 150, 50);
+							btnAdminOrderView.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+							btnAdminOrderView.setForeground(Color.WHITE);
+							btnAdminOrderView.setBackground(Color.RED);
+							btnAdminOrderView.setOpaque(true);
+							btnAdminOrderView.setFocusable(false);
+							btnAdminOrderView.setBorderPainted(false);
+							btnAdminOrderView.setFocusPainted(false);
 
 							// admin logout buttons
 							btnAdminLogout = new JButton("Logout");
@@ -825,12 +1279,11 @@ public class GUI{
 							adminPanel.add(btnAdminMarketAdditem);
 							adminPanel.add(btnAdminMarketDelete);
 
-
 							for(int i=0; i<=items.newItemID; i++){
-								checkboxMarket[i] = new JCheckBox();
-								checkboxMarket[i].setBounds(160, (200+30*(i+1)), 30, 30);
-								checkboxMarket[i].setBackground(Color.WHITE);
-								checkboxMarket[i].setFocusable(false);
+								checkboxAdminMarket[i] = new JCheckBox();
+								checkboxAdminMarket[i].setBounds(160, (200+30*(i+1)), 30, 30);
+								checkboxAdminMarket[i].setBackground(Color.WHITE);
+								checkboxAdminMarket[i].setFocusable(false);
 								
 								labelAdminMarketItemID[i] = new JLabel(String.valueOf(i));
 								labelAdminMarketItemID[i].setBounds(200, (200+30*(i+1)), 100, 30);
@@ -844,7 +1297,7 @@ public class GUI{
 								labelAdminMarketPrice[i].setBounds(600, (200+30*(i+1)), 100, 30);
 								labelAdminMarketPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-								adminPanel.add(checkboxMarket[i]);
+								adminPanel.add(checkboxAdminMarket[i]);
 								adminPanel.add(labelAdminMarketItemID[i]);
 								adminPanel.add(labelAdminMarketItemName[i]);
 								adminPanel.add(labelAdminMarketPrice[i]);
@@ -861,10 +1314,10 @@ public class GUI{
 							adminControlPanel.add(btnAdminControlDelete);
 
 							for(int i=0; i<=users.newUserID; i++){
-								checkboxControl[i] = new JCheckBox();
-								checkboxControl[i].setBounds(160, (150+30*(i+1)), 30, 30);
-								checkboxControl[i].setBackground(Color.WHITE);
-								checkboxControl[i].setFocusable(false);
+								checkboxAdminControl[i] = new JCheckBox();
+								checkboxAdminControl[i].setBounds(160, (150+30*(i+1)), 30, 30);
+								checkboxAdminControl[i].setBackground(Color.WHITE);
+								checkboxAdminControl[i].setFocusable(false);
 
 								labelAdminControlUserID[i] = new JLabel(String.valueOf(i));
 								labelAdminControlUserID[i].setBounds(200, (150+30*(i+1)), 100, 30);
@@ -878,17 +1331,51 @@ public class GUI{
 								labelAdminControlMobileNo[i].setBounds(600, (150+30*(i+1)), 100, 30);
 								labelAdminControlMobileNo[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
-								adminControlPanel.add(checkboxControl[i]);
+								adminControlPanel.add(checkboxAdminControl[i]);
 								adminControlPanel.add(labelAdminControlUserID[i]);
 								adminControlPanel.add(labelAdminControlUsername[i]);
 								adminControlPanel.add(labelAdminControlMobileNo[i]);
 
 							}
 
-							// admin view orders panel
+							// admin orders panel
 							adminViewOrdersPanel = new JPanel();
 							adminViewOrdersPanel.setBackground(Color.WHITE);
 							adminViewOrdersPanel.setLayout(null);
+							adminViewOrdersPanel.add(labelAdminOrderIDHeader);
+							adminViewOrdersPanel.add(labelAdminOrderDateHeader);
+							adminViewOrdersPanel.add(labelAdminOrderUsernameHeader);
+							adminViewOrdersPanel.add(labelAdminOrderTotalPriceHeader);
+							adminViewOrdersPanel.add(btnAdminOrderView);
+
+							for(int j=0; j<=orders.newOrderID; j++){
+								checkboxAdminOrders[j] = new JCheckBox();
+								checkboxAdminOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
+								checkboxAdminOrders[j].setBackground(Color.WHITE);
+								checkboxAdminOrders[j].setFocusable(false);
+	
+								labelAdminOrderID[j] = new JLabel(String.valueOf(j));
+								labelAdminOrderID[j].setBounds(200, (150+30*(j+1)), 100, 30);
+								labelAdminOrderID[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+	
+								labelAdminOrderDate[j] = new JLabel(orders.date[j]);
+								labelAdminOrderDate[j].setBounds(300, (150+30*(j+1)), 300, 30);
+								labelAdminOrderDate[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+	
+								labelAdminOrderUsername[j] = new JLabel(orders.username[j]);
+								labelAdminOrderUsername[j].setBounds(600, (150+30*(j+1)), 100, 30);
+								labelAdminOrderUsername[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+	
+								labelAdminOrderTotalPrice[j] = new JLabel(String.valueOf(orders.totalPrice[j]));
+								labelAdminOrderTotalPrice[j].setBounds(800, (150+30*(j+1)), 100, 30);
+								labelAdminOrderTotalPrice[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+	
+								adminViewOrdersPanel.add(checkboxAdminOrders[j]);
+								adminViewOrdersPanel.add(labelAdminOrderID[j]);
+								adminViewOrdersPanel.add(labelAdminOrderDate[j]);
+								adminViewOrdersPanel.add(labelAdminOrderUsername[j]);
+								adminViewOrdersPanel.add(labelAdminOrderTotalPrice[j]);
+							}
 
 							// refresh panel
 							JPanel tempPanel = new JPanel();
@@ -919,9 +1406,9 @@ public class GUI{
 								@Override
 								public void actionPerformed(ActionEvent arg0) {
 									for(int i=0; i<=users.newUserID; i++){
-										if(checkboxControl[i].isSelected()){
+										if(checkboxAdminControl[i].isSelected()){
 											for(int k=0; k<=users.newUserID; k++){
-												tempPanel.add(checkboxControl[k]);
+												tempPanel.add(checkboxAdminControl[k]);
 												tempPanel.add(labelAdminControlUserID[k]);
 												tempPanel.add(labelAdminControlUsername[k]);
 												tempPanel.add(labelAdminControlMobileNo[k]);
@@ -931,10 +1418,10 @@ public class GUI{
 											users.removeUser(i);
 
 											for(int k=0; k<=users.newUserID; k++){
-												checkboxControl[k] = new JCheckBox();
-												checkboxControl[k].setBounds(160, (150+30*(k+1)), 30, 30);
-												checkboxControl[k].setBackground(Color.WHITE);
-												checkboxControl[k].setFocusable(false);
+												checkboxAdminControl[k] = new JCheckBox();
+												checkboxAdminControl[k].setBounds(160, (150+30*(k+1)), 30, 30);
+												checkboxAdminControl[k].setBackground(Color.WHITE);
+												checkboxAdminControl[k].setFocusable(false);
 		
 												labelAdminControlUserID[k] = new JLabel(String.valueOf(k));
 												labelAdminControlUserID[k].setBounds(200, (150+30*(k+1)), 100, 30);
@@ -948,7 +1435,7 @@ public class GUI{
 												labelAdminControlMobileNo[k].setBounds(600, (150+30*(k+1)), 100, 30);
 												labelAdminControlMobileNo[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 		
-												adminControlPanel.add(checkboxControl[k]);
+												adminControlPanel.add(checkboxAdminControl[k]);
 												adminControlPanel.add(labelAdminControlUserID[k]);
 												adminControlPanel.add(labelAdminControlUsername[k]);
 												adminControlPanel.add(labelAdminControlMobileNo[k]);
@@ -999,59 +1486,62 @@ public class GUI{
 
 								@Override
 								public void actionPerformed(ActionEvent arg0) {
-									String itemName = textfieldAdminMarketAddItemName.getText();
-									double price = Double.valueOf(textfieldAdminMarketAddPrice.getText());
+									try{
+										String itemName = textfieldAdminMarketAddItemName.getText();
+										double price = Double.valueOf(textfieldAdminMarketAddPrice.getText());
 
-									for(int i=0; i<=items.newItemID; i++){
-										tempPanel.add(checkboxMarket[i]);
-										tempPanel.add(labelAdminMarketItemID[i]);
-										tempPanel.add(labelAdminMarketItemName[i]);
-										tempPanel.add(labelAdminMarketPrice[i]);
-									}
-
-									items.createItem(itemName, price);
-									System.out.println(items);
-
-									for(int i=0; i<=items.newItemID; i++){
-										checkboxMarket[i] = new JCheckBox();
-										checkboxMarket[i].setBounds(160, (200+30*(i+1)), 30, 30);
-										checkboxMarket[i].setBackground(Color.WHITE);
-										checkboxMarket[i].setFocusable(false);
-
-										labelAdminMarketItemID[i] = new JLabel(String.valueOf(i));
-										labelAdminMarketItemID[i].setBounds(200, (200+30*(i+1)), 100, 30);
-										labelAdminMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
-		
-										labelAdminMarketItemName[i] = new JLabel(items.itemName[i]);
-										labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 100, 30);
-										labelAdminMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
-		
-										labelAdminMarketPrice[i] = new JLabel(String.valueOf(items.price[i]));
-										labelAdminMarketPrice[i].setBounds(600, (200+30*(i+1)), 100, 30);
-										labelAdminMarketPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
-
-										textfieldAdminMarketAddItemName.setText("");
-										textfieldAdminMarketAddPrice.setText("");
-		
-										adminPanel.add(checkboxMarket[i]);
-										adminPanel.add(labelAdminMarketItemID[i]);
-										adminPanel.add(labelAdminMarketItemName[i]);
-										adminPanel.add(labelAdminMarketPrice[i]);
-									}
-
-									try {
-										System.out.println("Saving userinfo....");
-										users.saveUserinfo();
-										users = new Users();
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-
-									frame.setContentPane(adminPanel);
-									frame.validate();
-
-								}
 								
+										for(int i=0; i<=items.newItemID; i++){
+											tempPanel.add(checkboxAdminMarket[i]);
+											tempPanel.add(labelAdminMarketItemID[i]);
+											tempPanel.add(labelAdminMarketItemName[i]);
+											tempPanel.add(labelAdminMarketPrice[i]);
+										}
+
+										items.createItem(itemName, price);
+										System.out.println(items);
+
+										for(int i=0; i<=items.newItemID; i++){
+											checkboxAdminMarket[i] = new JCheckBox();
+											checkboxAdminMarket[i].setBounds(160, (200+30*(i+1)), 30, 30);
+											checkboxAdminMarket[i].setBackground(Color.WHITE);
+											checkboxAdminMarket[i].setFocusable(false);
+
+											labelAdminMarketItemID[i] = new JLabel(String.valueOf(i));
+											labelAdminMarketItemID[i].setBounds(200, (200+30*(i+1)), 100, 30);
+											labelAdminMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+			
+											labelAdminMarketItemName[i] = new JLabel(items.itemName[i]);
+											labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 100, 30);
+											labelAdminMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+			
+											labelAdminMarketPrice[i] = new JLabel(String.valueOf(items.price[i]));
+											labelAdminMarketPrice[i].setBounds(600, (200+30*(i+1)), 100, 30);
+											labelAdminMarketPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+											textfieldAdminMarketAddItemName.setText("");
+											textfieldAdminMarketAddPrice.setText("");
+			
+											adminPanel.add(checkboxAdminMarket[i]);
+											adminPanel.add(labelAdminMarketItemID[i]);
+											adminPanel.add(labelAdminMarketItemName[i]);
+											adminPanel.add(labelAdminMarketPrice[i]);
+										}
+
+										try {
+											System.out.println("Saving userinfo....");
+											users.saveUserinfo();
+											users = new Users();
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+
+										frame.setContentPane(adminPanel);
+										frame.validate();
+									}catch(Exception e){
+										System.out.println(e);
+									}
+								}							
 							});
 
 							btnAdminMarketDelete.addActionListener(new ActionListener(){
@@ -1059,9 +1549,9 @@ public class GUI{
 								@Override
 								public void actionPerformed(ActionEvent arg0) {
 									for(int i=0; i<=items.newItemID; i++){
-										if(checkboxMarket[i].isSelected()){
+										if(checkboxAdminMarket[i].isSelected()){
 											for(int k=0; k<=items.newItemID; k++){
-												tempPanel.add(checkboxMarket[k]);
+												tempPanel.add(checkboxAdminMarket[k]);
 												tempPanel.add(labelAdminMarketItemID[k]);
 												tempPanel.add(labelAdminMarketItemName[k]);
 												tempPanel.add(labelAdminMarketPrice[k]);
@@ -1071,10 +1561,10 @@ public class GUI{
 											items.removeItem(items.itemName[i]);
 
 											for(int k=0; k<=items.newItemID; k++){
-												checkboxMarket[k] = new JCheckBox();
-												checkboxMarket[k].setBounds(160, (200+30*(k+1)), 30, 30);
-												checkboxMarket[k].setBackground(Color.WHITE);
-												checkboxMarket[k].setFocusable(false);
+												checkboxAdminMarket[k] = new JCheckBox();
+												checkboxAdminMarket[k].setBounds(160, (200+30*(k+1)), 30, 30);
+												checkboxAdminMarket[k].setBackground(Color.WHITE);
+												checkboxAdminMarket[k].setFocusable(false);
 		
 												labelAdminMarketItemID[k] = new JLabel(String.valueOf(k));
 												labelAdminMarketItemID[k].setBounds(200, (200+30*(k+1)), 100, 30);
@@ -1091,7 +1581,7 @@ public class GUI{
 												textfieldAdminMarketAddItemName.setText("");
 												textfieldAdminMarketAddPrice.setText("");
 				
-												adminPanel.add(checkboxMarket[k]);
+												adminPanel.add(checkboxAdminMarket[k]);
 												adminPanel.add(labelAdminMarketItemID[k]);
 												adminPanel.add(labelAdminMarketItemName[k]);
 												adminPanel.add(labelAdminMarketPrice[k]);
@@ -1115,7 +1605,7 @@ public class GUI{
 								
 							});
 
-							// actions admin view orders
+							// action admin orders
 							btnAdminViewOrders.addActionListener(new ActionListener(){
 
 								@Override
@@ -1134,6 +1624,119 @@ public class GUI{
 
 									frame.setContentPane(adminViewOrdersPanel);
 									frame.validate();
+								}
+								
+							});
+
+							btnAdminOrderView.addActionListener(new ActionListener(){
+
+								@Override
+								public void actionPerformed(ActionEvent arg0) {
+									for(int i=0; i<=orders.newOrderID; i++){
+										if(checkboxAdminOrders[i].isSelected()){
+											JFrame frameViewOrder = new JFrame();
+
+											JLabel labelDate = new JLabel("Date: " + orders.date[i]);
+											labelDate.setBounds(100, 50, 400, 50);
+											labelDate.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
+											
+											JLabel labelUsername = new JLabel("Username: " + orders.username[i]);
+											labelUsername.setBounds(100, 100, 400, 50);
+											labelUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
+
+											JLabel labelItemIDHeader = new JLabel("Item ID");
+											labelItemIDHeader.setBounds(100, 150, 100, 30);
+											labelItemIDHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											JLabel labelItemNameHeader = new JLabel("Item Name");
+											labelItemNameHeader.setBounds(200, 150, 300, 30);
+											labelItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											JLabel labelPricePerQuantityHeader = new JLabel("Price/Quantity");
+											labelPricePerQuantityHeader.setBounds(350, 150, 100, 30);
+											labelPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											JLabel labelQuantityHeader = new JLabel("Quantity");
+											labelQuantityHeader.setBounds(500, 150, 100, 30);
+											labelQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											JLabel labelPriceHeader = new JLabel("Price");
+											labelPriceHeader.setBounds(600, 150, 100, 30);
+											labelPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											JLabel[] labelItemID = new JLabel[arraySize];
+											JLabel[] labelItemName = new JLabel[arraySize];
+											JLabel[] labelItemPricePerQuantity = new JLabel[arraySize];
+											JLabel[] labelItemQuantity = new JLabel[arraySize];
+											JLabel[] labelItemPrice = new JLabel[arraySize];
+
+											JLabel labelTotalPrice = new JLabel("Total Price: " + orders.totalPrice[i]);
+											labelTotalPrice.setBounds(500, SCREEN_HEIGHT-100, 300, 30);
+											labelTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
+
+											String[] arrayItemsName = orders.itemsName[i].split("-");
+											String[] arrayItemsPricePerQuantity = orders.itemsPricePerQuantity[i].split("-");
+											String[] arrayItemsQuantity = orders.itemsQuantity[i].split("-");
+
+											// panel
+											JPanel viewOrderPanel = new JPanel();
+											viewOrderPanel.setBackground(Color.WHITE);
+											viewOrderPanel.setLayout(null);	
+											viewOrderPanel.add(labelDate);
+											viewOrderPanel.add(labelUsername);
+											viewOrderPanel.add(labelTotalPrice);
+											viewOrderPanel.add(labelPriceHeader);
+											viewOrderPanel.add(labelQuantityHeader);
+											viewOrderPanel.add(labelPricePerQuantityHeader);
+											viewOrderPanel.add(labelItemNameHeader);
+											viewOrderPanel.add(labelItemIDHeader);
+
+											try{
+												for(int k=0; k<=items.newItemID; k++){
+													labelItemID[k] = new JLabel(String.valueOf(k));
+													labelItemID[k].setBounds(100, 150+30*(k+1), 100, 30);
+													labelItemID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+													System.out.println(arrayItemsName[k] + " " + arrayItemsPricePerQuantity[k] + "-" + arrayItemsQuantity[k]);
+
+													labelItemName[k] = new JLabel(arrayItemsName[k]);
+													labelItemName[k].setBounds(200, 150+30*(k+1), 100, 30);
+													labelItemName[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+													labelItemPricePerQuantity[k] = new JLabel(arrayItemsPricePerQuantity[k]);
+													labelItemPricePerQuantity[k].setBounds(350, 150+30*(k+1), 100, 30);
+													labelItemPricePerQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+													labelItemQuantity[k] = new JLabel(arrayItemsQuantity[k]);
+													labelItemQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
+													labelItemQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+													labelItemPrice[k] = new JLabel(String.valueOf(Double.valueOf(arrayItemsPricePerQuantity[k]) * Double.valueOf(arrayItemsQuantity[k])));
+													labelItemPrice[k].setBounds(600, 150+30*(k+1), 100, 30);
+													labelItemPrice[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+
+				
+													viewOrderPanel.add(labelItemID[k]);
+													viewOrderPanel.add(labelItemName[k]);
+													viewOrderPanel.add(labelItemPricePerQuantity[k]);
+													viewOrderPanel.add(labelItemQuantity[k]);
+													viewOrderPanel.add(labelItemPrice[k]);
+												}
+											}catch(Exception e){
+												System.out.println(e);
+											}
+
+											// frame
+											frameViewOrder.setContentPane(viewOrderPanel);
+											frameViewOrder.setTitle(orders.date[i] + " " + orders.username[i]);
+											frameViewOrder.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+											frameViewOrder.setResizable(false);
+											frameViewOrder.setLocationRelativeTo(null);
+											frameViewOrder.setVisible(true);
+											frameViewOrder.setLayout(null);
+											break;
+										}
+									}
 								}
 								
 							});
@@ -1199,6 +1802,8 @@ public class GUI{
 					users.saveUserinfo();
 					System.out.println("Saving iteminfo....");
 					items.saveIteminfo();
+					System.out.println("Saving orderinfo....");
+					orders.saveOrderInfo();;
 				} catch (Exception e1) {
 					System.out.println(e1);
 				}
@@ -1206,7 +1811,7 @@ public class GUI{
 		});
 		
 		// frame
-		frame.setTitle("Supermarket Management System");
+		frame.setTitle(FRAME_TITLE);
 		frame.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setResizable(false);

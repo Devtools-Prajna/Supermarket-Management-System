@@ -2,14 +2,15 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-public class Items {
+public class Items extends Function{
     String[] itemName;
     double[] price;
-    int newItemID=-1;
+    int newItemID = -1;
+    int arraySize = 100;
     
     Items() throws Exception{
-        itemName = new String[100];
-        price = new double[100];
+        itemName = new String[arraySize];
+        price = new double[arraySize];
 
         File file = new File("Items.txt");
         if(file.createNewFile()){
@@ -39,7 +40,7 @@ public class Items {
 
         for(int i=0; i<this.itemName.length; i++){
             if(itemName.equals(this.itemName[i])){
-                itemInfo[0] = i + "";
+                itemInfo[0] = String.valueOf(i);
                 itemInfo[1] = this.itemName[i];
                 itemInfo[2] = String.valueOf(this.price[i]);
                 break;
@@ -84,6 +85,10 @@ public class Items {
             this.itemName[i] = tempitemName[i];
             this.price[i] = tempprice[i];
         }
+    }
+
+    boolean illegalUserTextInput(String text){
+        return super.illegalUserTextInput(text);
     }
 
     @Override

@@ -2,16 +2,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.util.Scanner;
 
-public class Users {
+public class Users extends Function{
     String[] username;
     String[] mobileNo;
     String[] password;
     int newUserID=-1;
+    int arraySize = 100;
     
     Users() throws Exception{
-        username = new String[100];
-        mobileNo = new String[100];
-        password = new String[100];
+        username = new String[arraySize];
+        mobileNo = new String[arraySize];
+        password = new String[arraySize];
 
         File file = new File("Users.txt");
         if(file.createNewFile()){
@@ -43,7 +44,7 @@ public class Users {
 
         for(int i=0; i<this.username.length; i++){
             if(username.equals(this.username[i])){
-                userinfo[0] = i + "";
+                userinfo[0] = String.valueOf(i);
                 userinfo[1] = this.username[i];
                 userinfo[2] = this.mobileNo[i];
                 userinfo[3] = this.password[i];
@@ -93,6 +94,10 @@ public class Users {
             this.mobileNo[i] = mobileNo[i];
             this.password[i] = password[i];
         }
+    }
+
+    boolean illegalUserTextInput(String text){
+        return super.illegalUserTextInput(text);
     }
 
     @Override
