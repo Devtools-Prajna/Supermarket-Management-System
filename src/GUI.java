@@ -779,6 +779,8 @@ public class GUI{
 						public void actionPerformed(ActionEvent arg0) {
 							for(int i=0; i<=orders.newOrderID; i++){
 								if(checkboxUserOrders[i].isSelected()){
+									System.out.println(i);
+
 									JFrame frameViewOrder = new JFrame();
 
 									JLabel labelDate = new JLabel("Date: " + orders.date[i]);
