@@ -8,3 +8,9 @@ public class Main {
 		}
 	}
 }
+
+/*
+Main
+
++ main() : void
+ */

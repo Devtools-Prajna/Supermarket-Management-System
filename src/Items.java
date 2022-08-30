@@ -107,3 +107,22 @@ public class Items extends Function{
     }
 
 }
+
+/*
+Items
+
+- itemName : String[]
+- price : double[] 
+- newItemID : int
+- arraySize : int
+
++ Items()
++ createItem(itemName : String, price : double) : void
++ getIteminfo(itemName : String) : String[]
++ editIteminfo(itemID : int, itemName : String, price : double) :  void
++ saveIteminfo() : void
++ removeItem(itemName : String) : void
++ illegalUserTextInput(text : String) : boolean
++ toString() : String
+
+ */

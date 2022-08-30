@@ -143,3 +143,26 @@ public class Orders extends Function{
     }
 
 }
+
+/*
+Orders
+
+- arraySize : int
+- date : String[]
+- username : String[]
+- itemsName : String[]
+- itemsPricePerQuantity : String[]
+- itemsQuantity : String[]
+- totalPrice : double[]
+- newOrderID : int
+
++ Orders()
++ createOrder(date : String, username : String, itemsName : String, itemsPricePerQuantity : String, itemsQuantity : String, totalPrice : double) : void
++ getOrderinfo(date : String) : String[]
++ editOrder(orderID : int, date : String, username : String, itemsName : String, itemsPricePerQuantity : String, itemsQuantity : String) : void
++ saveOrderInfo() : void
++ removeOrder(orderID : int) : void
++ illegalUserTextInput(text : String) : boolean
++ toString() : String
+
+ */

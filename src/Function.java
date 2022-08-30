@@ -12,3 +12,10 @@ public abstract class Function {
     }
 
 }
+
+/* 
+
+Function
+
++ illegalUserTextInput(text: String) : boolean
+*/

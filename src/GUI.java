@@ -1822,3 +1822,151 @@ public class GUI{
 		frame.setLayout(null);
 	}
 }
+
+/*
+GUI
+
+- SCREEN_WIDTH : int 
+- SCREEN_HEIGHT : int
+- COLOR_GREENISH : int 
+- COLOR_SKY_BLUE : int 
+- FONT_HEADER1_SIZE : int 
+- FONT_HEADER2_SIZE : int 
+- FONT_DEFAULT_SIZE : int 
+- POSITION_X_LOGIN : int 
+- POSITION_Y_LOGIN : int 
+- POSITION_X_USER : int 
+- POSITION_Y_USER : int 
+- POSITION_X_CONTENT : int 
+- POSITION_Y_CONTENT : int 
+- arraySize : int 
+- length : int
+
+- FRAME_TITLE : String 
+- ROOT_PASSWORD : String 
+- FONT_DEFAULT : String
+
+- users : Users
+- items : Items
+- orders : Orders
+
+- dtf : DateTimeFormatter 
+
+- frame : JFrame
+
+- userLoginPanel : JPanel
+- userSignupPanel : JPanel
+- userPanel : JPanel
+- userProfilePanel : JPanel
+- userOrdersPanel : JPanel
+- adminLoginPanel : JPanel
+- adminPanel : JPanel
+- adminControlPanel : JPanel
+- adminViewOrdersPanel : JPanel	
+
+- labelLogin : JLabel
+- labelUsername : JLabel
+- labelPassword : JLabel
+- labelProfileHeader : JLabel
+- labelUserMarketHeader : JLabel
+- labelUserOrdersHeader : JLabel
+- labelProfileUsername : JLabel
+- labelProfileMobileNo : JLabel
+- labelProfilePassword : JLabel
+- labelUserSignup : JLabel
+- labelSignupUsername : JLabel
+- labelSignupMobileNumber : JLabel
+- labelSignupPassword : JLabel
+- labelUserMarketItemIDHeader : JLabel
+- labelUserMarketItemNameHeader : JLabel
+- labelUserMarketPricePerQuantityHeader : JLabel
+- labelUserMarketQuantityHeader : JLabel
+- labelUserMarketPriceHeader : JLabel
+- labelUserMarketTotalPriceHeader : JLabel
+- labelUserMarketTotalPrice : JLabel
+- labelUserOrderIDHeader : JLabel
+- labelUserOrderDateHeader : JLabel
+- labelUserOrderTotalPriceHeader : JLabel
+- labelAdminLogin : JLabel
+- labelAdminPassword : JLabel
+- labelAdminMarketHeader : JLabel
+- labelAdminControlHeader : JLabel
+- labelAdminViewOrdersHeader : JLabel
+- labelAdminAddItemsHeader : JLabel
+- labelAdminControlUserIDHeader : JLabel
+- labelAdminControlUsernameHeader : JLabel
+- labelAdminControlMobileNoHeader : JLabel
+- labelAdminMarketItemIDHeader : JLabel
+- labelAdminMarketItemNameHeader : JLabel
+- labelAdminMarketPriceHeader : JLabel
+- labelAdminMarketAddItemName : JLabel
+- labelAdminMarketAddPrice : JLabel
+- labelAdminOrderIDHeader : JLabel
+- labelAdminOrderDateHeader : JLabel
+- labelAdminOrderUsernameHeader : JLabel
+- labelAdminOrderTotalPriceHeader : JLabel
+- labelAdminOrderID : JLabel[]
+- labelAdminOrderDate : JLabel[]
+- labelAdminOrderUsername : JLabel[]
+- labelAdminOrderTotalPrice : JLabel[]
+- labelAdminMarketItemID : JLabel[]
+- labelAdminMarketItemName : JLabel[]
+- labelAdminMarketPrice : JLabel[]
+- labelAdminControlUserID : JLabel[]
+- labelAdminControlUsername : JLabel[]
+- labelAdminControlMobileNo : JLabel[]
+- labelUserOrderID : JLabel[]
+- labelUserOrderDate : JLabel[]
+- labelUserOrderTotalPrice : JLabel[]
+- labelUserMarketItemID : JLabel[]
+- labelUserMarketItemName : JLabel[]
+- labelUserMarketPricePerQuantity : JLabel[]
+- labelUserMarketPrice : JLabel[]
+
+- checkboxUserOrders : JCheckBox[]
+- checkboxAdminControl : JCheckBox[]
+- checkboxAdminMarket : JCheckBox[]
+- checkboxAdminOrders : JCheckBox[]
+
+- textfieldUsername : JTextField
+- textfieldEditUsername : JTextField
+- textfieldEditMobileNo : JTextField
+- textfieldSignupUsername : JTextField
+- textfieldSignupMobileNumber : JTextField
+- textfieldAdminMarketAddItemName : JTextField
+- textfieldAdminMarketAddPrice : JTextField
+- textfieldUserMarketItemQuantity : JTextField[]
+
+- passwordFieldUser : JPasswordField
+- passfieldEditPassword : JPasswordField
+- passwordFieldSignupUser : JPasswordField
+- passwordFieldAdmin : JPasswordField
+
+- btnUserProfile : JButton
+- btnUserLoginAttempt : JButton
+- btnUserSignupPanel : JButton
+- btnUserMarket : JButton
+- btnUserOrders : JButton
+- btnUserLogout : JButton
+- btnUserDeleteAccount : JButton
+- btnUserSaveChanges : JButton
+- btnUserLoginPanel : JButton
+- btnUserSignupAttempt : JButton
+- btnUserMarketPlaceOrder : JButton
+- btnUserMarketCalculate : JButton
+- btnUserOrderView : JButton
+- btnAdmin : JButton
+- btnAdminLoginAtttempt : JButton
+- btnAdminUser : JButton
+- btnAdminLogout : JButton
+- btnAdminControl : JButton
+- btnAdminControlDelete : JButton
+- btnAdminMarket : JButton
+- btnAdminViewOrders : JButton
+- btnAdminMarketAdditem : JButton
+- btnAdminMarketDelete : JButton
+- btnAdminOrderView : JButton
+
++ GUI()
+
+ */

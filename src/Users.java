@@ -115,3 +115,23 @@ public class Users extends Function{
         return info;
     }
 }
+
+/*
+Users
+
+- username : String[]
+- mobileNo : String[]
+- password : String[]
+- newUserID : int
+- arraySize : int
+
++ Users()
++ createUser(username : String, mobileNo : String, password : String) : void
++ getUserinfo(username : String) : String[] 
++ editUserinfo(userID : int, username : String, mobileNo : String, password : String) : void
++ saveUserinfo() : void
++ removeUser(userID : int) : void
++ illegalUserTextInput(text : String) : boolean
++ toString() : String
+
+ */
