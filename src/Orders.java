@@ -22,7 +22,7 @@ public class Orders extends Function{
         itemsPricePerQuantity = new String[arraySize];
         totalPrice = new double[arraySize];
 
-        File file = new File("Orders.txt");
+        File file = new File("../Orders.txt");
         if(file.createNewFile()){
             System.out.println("File created: " + file.getName());
         }
@@ -80,7 +80,7 @@ public class Orders extends Function{
     }
 
     void saveOrderInfo() throws Exception{
-        File file = new File("Orders.txt");
+        File file = new File("../Orders.txt");
         
         if(file.createNewFile()){
             System.out.println("File created");

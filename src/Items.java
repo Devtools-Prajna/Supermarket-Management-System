@@ -12,7 +12,7 @@ public class Items extends Function{
         itemName = new String[arraySize];
         price = new double[arraySize];
 
-        File file = new File("Items.txt");
+        File file = new File("../Items.txt");
         if(file.createNewFile()){
             System.out.println("File created: " + file.getName());
         }
@@ -56,7 +56,7 @@ public class Items extends Function{
     }
 
     void saveIteminfo() throws Exception{
-        File file = new File("Items.txt");
+        File file = new File("../Items.txt");
         
         if(file.createNewFile()){
             System.out.println("File created");

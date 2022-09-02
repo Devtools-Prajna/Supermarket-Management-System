@@ -273,23 +273,23 @@ public class GUI{
 					labelUserMarketItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 					labelUserMarketPricePerQuantityHeader = new JLabel("Price/Quantity");
-					labelUserMarketPricePerQuantityHeader.setBounds(450, 150, 100, 30);
+					labelUserMarketPricePerQuantityHeader.setBounds(550, 150, 100, 30);
 					labelUserMarketPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 					labelUserMarketQuantityHeader = new JLabel("Quantity");
-					labelUserMarketQuantityHeader.setBounds(600, 150, 100, 30);
+					labelUserMarketQuantityHeader.setBounds(650, 150, 100, 30);
 					labelUserMarketQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 					labelUserMarketPriceHeader = new JLabel("Price");
-					labelUserMarketPriceHeader.setBounds(700, 150, 100, 30);
+					labelUserMarketPriceHeader.setBounds(750, 150, 100, 30);
 					labelUserMarketPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 					labelUserMarketTotalPriceHeader = new JLabel("Total Price");
-					labelUserMarketTotalPriceHeader.setBounds(600, SCREEN_HEIGHT-100, 100, 30);
+					labelUserMarketTotalPriceHeader.setBounds(650, SCREEN_HEIGHT-100, 100, 30);
 					labelUserMarketTotalPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 					labelUserMarketTotalPrice = new JLabel("0.0");
-					labelUserMarketTotalPrice.setBounds(700, SCREEN_HEIGHT-100, 100, 30);
+					labelUserMarketTotalPrice.setBounds(750, SCREEN_HEIGHT-100, 100, 30);
 					labelUserMarketTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
 
 					textfieldUserMarketItemQuantity = new JTextField[arraySize];
@@ -476,21 +476,21 @@ public class GUI{
 						labelUserMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 						labelUserMarketItemName[i] = new JLabel(items.itemName[i]);
-						labelUserMarketItemName[i].setBounds(300, (150+30*(i+1)), 100, 30);
+						labelUserMarketItemName[i].setBounds(300, (150+30*(i+1)), 300, 30);
 						labelUserMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 						labelUserMarketPricePerQuantity[i] = new JLabel(String.valueOf(items.price[i]));
-						labelUserMarketPricePerQuantity[i].setBounds(450, (150+30*(i+1)), 100, 30);
+						labelUserMarketPricePerQuantity[i].setBounds(550, (150+30*(i+1)), 100, 30);
 						labelUserMarketPricePerQuantity[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 						textfieldUserMarketItemQuantity[i] = new JTextField();
 						textfieldUserMarketItemQuantity[i].setText("0");
-						textfieldUserMarketItemQuantity[i].setBounds(600, (150+30*(i+1)), 50, 30);
+						textfieldUserMarketItemQuantity[i].setBounds(650, (150+30*(i+1)), 50, 30);
 						textfieldUserMarketItemQuantity[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 						labelUserMarketPrice[i] = new JLabel();
 						labelUserMarketPrice[i].setText("0.0");
-						labelUserMarketPrice[i].setBounds(700, (150+30*(i+1)), 50, 30);
+						labelUserMarketPrice[i].setBounds(750, (150+30*(i+1)), 50, 30);
 						labelUserMarketPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));						
 
 						userPanel.add(labelUserMarketItemID[i]);
@@ -514,7 +514,7 @@ public class GUI{
 					userOrdersPanel.add(labelUserOrderTotalPriceHeader);
 					userOrdersPanel.add(btnUserOrderView);
 
-					for(int i=0, j=0; i<=orders.newOrderID; i++){
+					for(int i=orders.newOrderID, j=0; i>=0; i--){
 						if(orders.username[i].equals(username)){
 							checkboxUserOrders[j] = new JCheckBox();
 							checkboxUserOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
@@ -714,7 +714,7 @@ public class GUI{
 								JOptionPane.showMessageDialog(null, "Successfully placed your order!", "Confirm", JOptionPane.INFORMATION_MESSAGE);
 								btnUserMarketPlaceOrder.setEnabled(false);
 
-								for(int i=0, j=0; i<=orders.newOrderID; i++){
+								for(int i=orders.newOrderID, j=0; i>=0; i--){
 									if(orders.username[i].equals(username)){
 										checkboxUserOrders[j] = new JCheckBox();
 										checkboxUserOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
@@ -781,13 +781,16 @@ public class GUI{
 								if(checkboxUserOrders[i].isSelected()){
 									System.out.println(i);
 
+									int checkedOrderID = Integer.valueOf(labelUserOrderID[i].getText());
+									System.out.println(checkedOrderID);
+
 									JFrame frameViewOrder = new JFrame();
 
-									JLabel labelDate = new JLabel("Date: " + orders.date[i]);
+									JLabel labelDate = new JLabel("Date: " + orders.date[checkedOrderID]);
 									labelDate.setBounds(100, 50, 400, 50);
 									labelDate.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
 									
-									JLabel labelUsername = new JLabel("Username: " + orders.username[i]);
+									JLabel labelUsername = new JLabel("Username: " + orders.username[checkedOrderID]);
 									labelUsername.setBounds(100, 100, 400, 50);
 									labelUsername.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_HEADER2_SIZE));
 
@@ -800,15 +803,15 @@ public class GUI{
 									labelItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 									JLabel labelPricePerQuantityHeader = new JLabel("Price/Quantity");
-									labelPricePerQuantityHeader.setBounds(350, 150, 100, 30);
+									labelPricePerQuantityHeader.setBounds(500, 150, 100, 30);
 									labelPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 									JLabel labelQuantityHeader = new JLabel("Quantity");
-									labelQuantityHeader.setBounds(500, 150, 100, 30);
+									labelQuantityHeader.setBounds(700, 150, 100, 30);
 									labelQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 									JLabel labelPriceHeader = new JLabel("Price");
-									labelPriceHeader.setBounds(600, 150, 100, 30);
+									labelPriceHeader.setBounds(800, 150, 100, 30);
 									labelPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 									JLabel[] labelItemID = new JLabel[arraySize];
@@ -817,13 +820,13 @@ public class GUI{
 									JLabel[] labelItemQuantity = new JLabel[arraySize];
 									JLabel[] labelItemPrice = new JLabel[arraySize];
 
-									JLabel labelTotalPrice = new JLabel("Total Price: " + orders.totalPrice[i]);
-									labelTotalPrice.setBounds(500, SCREEN_HEIGHT-100, 300, 30);
+									JLabel labelTotalPrice = new JLabel("Total Price: " + orders.totalPrice[checkedOrderID]);
+									labelTotalPrice.setBounds(700, SCREEN_HEIGHT-100, 300, 30);
 									labelTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
-									String[] arrayItemsName = orders.itemsName[i].split("-");
-									String[] arrayItemsPricePerQuantity = orders.itemsPricePerQuantity[i].split("-");
-									String[] arrayItemsQuantity = orders.itemsQuantity[i].split("-");
+									String[] arrayItemsName = orders.itemsName[checkedOrderID].split("-");
+									String[] arrayItemsPricePerQuantity = orders.itemsPricePerQuantity[checkedOrderID].split("-");
+									String[] arrayItemsQuantity = orders.itemsQuantity[checkedOrderID].split("-");
 
 									// panel
 									JPanel viewOrderPanel = new JPanel();
@@ -839,7 +842,7 @@ public class GUI{
 									viewOrderPanel.add(labelItemIDHeader);
 
 									try{
-										for(int k=0; k<=items.newItemID; k++){
+										for(int k=0; k<arrayItemsName.length; k++){
 											labelItemID[k] = new JLabel(String.valueOf(k));
 											labelItemID[k].setBounds(100, 150+30*(k+1), 100, 30);
 											labelItemID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
@@ -847,19 +850,19 @@ public class GUI{
 											System.out.println(arrayItemsName[k] + " " + arrayItemsPricePerQuantity[k] + "-" + arrayItemsQuantity[k]);
 
 											labelItemName[k] = new JLabel(arrayItemsName[k]);
-											labelItemName[k].setBounds(200, 150+30*(k+1), 100, 30);
+											labelItemName[k].setBounds(200, 150+30*(k+1), 300, 30);
 											labelItemName[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 											labelItemPricePerQuantity[k] = new JLabel(arrayItemsPricePerQuantity[k]);
-											labelItemPricePerQuantity[k].setBounds(350, 150+30*(k+1), 100, 30);
+											labelItemPricePerQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
 											labelItemPricePerQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 											labelItemQuantity[k] = new JLabel(arrayItemsQuantity[k]);
-											labelItemQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
+											labelItemQuantity[k].setBounds(700, 150+30*(k+1), 100, 30);
 											labelItemQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 											labelItemPrice[k] = new JLabel(String.valueOf(Double.valueOf(arrayItemsPricePerQuantity[k]) * Double.valueOf(arrayItemsQuantity[k])));
-											labelItemPrice[k].setBounds(600, 150+30*(k+1), 100, 30);
+											labelItemPrice[k].setBounds(800, 150+30*(k+1), 100, 30);
 											labelItemPrice[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 		
@@ -1292,7 +1295,7 @@ public class GUI{
 								labelAdminMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 								labelAdminMarketItemName[i] = new JLabel(items.itemName[i]);
-								labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 100, 30);
+								labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 300, 30);
 								labelAdminMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 								labelAdminMarketPrice[i] = new JLabel(String.valueOf(items.price[i]));
@@ -1326,11 +1329,11 @@ public class GUI{
 								labelAdminControlUserID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 								labelAdminControlUsername[i] = new JLabel(users.username[i]);
-								labelAdminControlUsername[i].setBounds(300, (150+30*(i+1)), 100, 30);
+								labelAdminControlUsername[i].setBounds(300, (150+30*(i+1)), 300, 30);
 								labelAdminControlUsername[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 								labelAdminControlMobileNo[i] = new JLabel(users.mobileNo[i]);
-								labelAdminControlMobileNo[i].setBounds(600, (150+30*(i+1)), 100, 30);
+								labelAdminControlMobileNo[i].setBounds(600, (150+30*(i+1)), 300, 30);
 								labelAdminControlMobileNo[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 								adminControlPanel.add(checkboxAdminControl[i]);
@@ -1340,7 +1343,7 @@ public class GUI{
 
 							}
 
-							// admin orders panel
+							// admin order panel
 							adminViewOrdersPanel = new JPanel();
 							adminViewOrdersPanel.setBackground(Color.WHITE);
 							adminViewOrdersPanel.setLayout(null);
@@ -1350,33 +1353,34 @@ public class GUI{
 							adminViewOrdersPanel.add(labelAdminOrderTotalPriceHeader);
 							adminViewOrdersPanel.add(btnAdminOrderView);
 
-							for(int j=0; j<=orders.newOrderID; j++){
-								checkboxAdminOrders[j] = new JCheckBox();
-								checkboxAdminOrders[j].setBounds(160, (150+30*(j+1)), 30, 30);
-								checkboxAdminOrders[j].setBackground(Color.WHITE);
-								checkboxAdminOrders[j].setFocusable(false);
+							for(int i=0, j=orders.newOrderID; j>=0; j--){
+								checkboxAdminOrders[i] = new JCheckBox();
+								checkboxAdminOrders[i].setBounds(160, (150+30*(j+1)), 30, 30);
+								checkboxAdminOrders[i].setBackground(Color.WHITE);
+								checkboxAdminOrders[i].setFocusable(false);
 	
-								labelAdminOrderID[j] = new JLabel(String.valueOf(j));
-								labelAdminOrderID[j].setBounds(200, (150+30*(j+1)), 100, 30);
-								labelAdminOrderID[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+								labelAdminOrderID[i] = new JLabel(String.valueOf(j));
+								labelAdminOrderID[i].setBounds(200, (150+30*(i+1)), 100, 30);
+								labelAdminOrderID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 	
-								labelAdminOrderDate[j] = new JLabel(orders.date[j]);
-								labelAdminOrderDate[j].setBounds(300, (150+30*(j+1)), 300, 30);
-								labelAdminOrderDate[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+								labelAdminOrderDate[i] = new JLabel(orders.date[j]);
+								labelAdminOrderDate[i].setBounds(300, (150+30*(i+1)), 300, 30);
+								labelAdminOrderDate[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 	
-								labelAdminOrderUsername[j] = new JLabel(orders.username[j]);
-								labelAdminOrderUsername[j].setBounds(600, (150+30*(j+1)), 100, 30);
-								labelAdminOrderUsername[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+								labelAdminOrderUsername[i] = new JLabel(orders.username[j]);
+								labelAdminOrderUsername[i].setBounds(600, (150+30*(i+1)), 300, 30);
+								labelAdminOrderUsername[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 	
-								labelAdminOrderTotalPrice[j] = new JLabel(String.valueOf(orders.totalPrice[j]));
-								labelAdminOrderTotalPrice[j].setBounds(800, (150+30*(j+1)), 100, 30);
-								labelAdminOrderTotalPrice[j].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
+								labelAdminOrderTotalPrice[i] = new JLabel(String.valueOf(orders.totalPrice[j]));
+								labelAdminOrderTotalPrice[i].setBounds(800, (150+30*(i+1)), 100, 30);
+								labelAdminOrderTotalPrice[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 	
-								adminViewOrdersPanel.add(checkboxAdminOrders[j]);
-								adminViewOrdersPanel.add(labelAdminOrderID[j]);
-								adminViewOrdersPanel.add(labelAdminOrderDate[j]);
-								adminViewOrdersPanel.add(labelAdminOrderUsername[j]);
-								adminViewOrdersPanel.add(labelAdminOrderTotalPrice[j]);
+								adminViewOrdersPanel.add(checkboxAdminOrders[i]);
+								adminViewOrdersPanel.add(labelAdminOrderID[i]);
+								adminViewOrdersPanel.add(labelAdminOrderDate[i]);
+								adminViewOrdersPanel.add(labelAdminOrderUsername[i]);
+								adminViewOrdersPanel.add(labelAdminOrderTotalPrice[i]);
+								i++;
 							}
 
 							// refresh panel
@@ -1430,11 +1434,11 @@ public class GUI{
 												labelAdminControlUserID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 				
 												labelAdminControlUsername[k] = new JLabel(users.username[k]);
-												labelAdminControlUsername[k].setBounds(300, (150+30*(k+1)), 100, 30);
+												labelAdminControlUsername[k].setBounds(300, (150+30*(k+1)), 300, 30);
 												labelAdminControlUsername[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 				
 												labelAdminControlMobileNo[k] = new JLabel(String.valueOf(users.mobileNo[k]));
-												labelAdminControlMobileNo[k].setBounds(600, (150+30*(k+1)), 100, 30);
+												labelAdminControlMobileNo[k].setBounds(600, (150+30*(k+1)), 300, 30);
 												labelAdminControlMobileNo[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 		
 												adminControlPanel.add(checkboxAdminControl[k]);
@@ -1492,6 +1496,8 @@ public class GUI{
 										String itemName = textfieldAdminMarketAddItemName.getText();
 										double price = Double.valueOf(textfieldAdminMarketAddPrice.getText());
 
+										String arrayItemName[] = itemName.split(" ");
+										itemName = String.join("_", arrayItemName);
 								
 										for(int i=0; i<=items.newItemID; i++){
 											tempPanel.add(checkboxAdminMarket[i]);
@@ -1514,7 +1520,7 @@ public class GUI{
 											labelAdminMarketItemID[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 			
 											labelAdminMarketItemName[i] = new JLabel(items.itemName[i]);
-											labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 100, 30);
+											labelAdminMarketItemName[i].setBounds(300, (200+30*(i+1)), 300, 30);
 											labelAdminMarketItemName[i].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 			
 											labelAdminMarketPrice[i] = new JLabel(String.valueOf(items.price[i]));
@@ -1562,6 +1568,13 @@ public class GUI{
 											System.out.println("deleting item: " + i + " " + items.itemName[i] + " " + items.price[i]);
 											items.removeItem(items.itemName[i]);
 
+											try{
+												items.saveIteminfo();
+												items = new Items();
+											}catch(Exception e){
+												System.out.println(e);
+											}
+
 											for(int k=0; k<=items.newItemID; k++){
 												checkboxAdminMarket[k] = new JCheckBox();
 												checkboxAdminMarket[k].setBounds(160, (200+30*(k+1)), 30, 30);
@@ -1573,7 +1586,7 @@ public class GUI{
 												labelAdminMarketItemID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 				
 												labelAdminMarketItemName[k] = new JLabel(items.itemName[k]);
-												labelAdminMarketItemName[k].setBounds(300, (200+30*(k+1)), 100, 30);
+												labelAdminMarketItemName[k].setBounds(300, (200+30*(k+1)), 300, 30);
 												labelAdminMarketItemName[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 				
 												labelAdminMarketPrice[k] = new JLabel(String.valueOf(items.price[k]));
@@ -1655,15 +1668,15 @@ public class GUI{
 											labelItemNameHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 											JLabel labelPricePerQuantityHeader = new JLabel("Price/Quantity");
-											labelPricePerQuantityHeader.setBounds(350, 150, 100, 30);
+											labelPricePerQuantityHeader.setBounds(500, 150, 100, 30);
 											labelPricePerQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 											JLabel labelQuantityHeader = new JLabel("Quantity");
-											labelQuantityHeader.setBounds(500, 150, 100, 30);
+											labelQuantityHeader.setBounds(700, 150, 100, 30);
 											labelQuantityHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 											JLabel labelPriceHeader = new JLabel("Price");
-											labelPriceHeader.setBounds(600, 150, 100, 30);
+											labelPriceHeader.setBounds(800, 150, 100, 30);
 											labelPriceHeader.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 											JLabel[] labelItemID = new JLabel[arraySize];
@@ -1673,7 +1686,7 @@ public class GUI{
 											JLabel[] labelItemPrice = new JLabel[arraySize];
 
 											JLabel labelTotalPrice = new JLabel("Total Price: " + orders.totalPrice[i]);
-											labelTotalPrice.setBounds(500, SCREEN_HEIGHT-100, 300, 30);
+											labelTotalPrice.setBounds(700, SCREEN_HEIGHT-100, 300, 30);
 											labelTotalPrice.setFont(new Font(FONT_DEFAULT, Font.BOLD, FONT_DEFAULT_SIZE));
 
 											String[] arrayItemsName = orders.itemsName[i].split("-");
@@ -1694,7 +1707,7 @@ public class GUI{
 											viewOrderPanel.add(labelItemIDHeader);
 
 											try{
-												for(int k=0; k<=items.newItemID; k++){
+												for(int k=0; k<arrayItemsName.length; k++){
 													labelItemID[k] = new JLabel(String.valueOf(k));
 													labelItemID[k].setBounds(100, 150+30*(k+1), 100, 30);
 													labelItemID[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
@@ -1702,19 +1715,19 @@ public class GUI{
 													System.out.println(arrayItemsName[k] + " " + arrayItemsPricePerQuantity[k] + "-" + arrayItemsQuantity[k]);
 
 													labelItemName[k] = new JLabel(arrayItemsName[k]);
-													labelItemName[k].setBounds(200, 150+30*(k+1), 100, 30);
+													labelItemName[k].setBounds(200, 150+30*(k+1), 300, 30);
 													labelItemName[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 													labelItemPricePerQuantity[k] = new JLabel(arrayItemsPricePerQuantity[k]);
-													labelItemPricePerQuantity[k].setBounds(350, 150+30*(k+1), 100, 30);
+													labelItemPricePerQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
 													labelItemPricePerQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 													labelItemQuantity[k] = new JLabel(arrayItemsQuantity[k]);
-													labelItemQuantity[k].setBounds(500, 150+30*(k+1), 100, 30);
+													labelItemQuantity[k].setBounds(700, 150+30*(k+1), 100, 30);
 													labelItemQuantity[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 													labelItemPrice[k] = new JLabel(String.valueOf(Double.valueOf(arrayItemsPricePerQuantity[k]) * Double.valueOf(arrayItemsQuantity[k])));
-													labelItemPrice[k].setBounds(600, 150+30*(k+1), 100, 30);
+													labelItemPrice[k].setBounds(800, 150+30*(k+1), 100, 30);
 													labelItemPrice[k].setFont(new Font(FONT_DEFAULT, Font.PLAIN, FONT_DEFAULT_SIZE));
 
 				

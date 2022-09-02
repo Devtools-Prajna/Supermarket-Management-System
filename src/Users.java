@@ -14,7 +14,7 @@ public class Users extends Function{
         mobileNo = new String[arraySize];
         password = new String[arraySize];
 
-        File file = new File("Users.txt");
+        File file = new File("../Users.txt");
         if(file.createNewFile()){
             System.out.println("File created: " + file.getName());
         }
@@ -62,7 +62,7 @@ public class Users extends Function{
     }
 
     void saveUserinfo() throws Exception{
-        File file = new File("Users.txt");
+        File file = new File("../Users.txt");
         
         if(file.createNewFile()){
             System.out.println("File created");
