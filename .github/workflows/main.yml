@@ -4,9 +4,10 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  # Job 1: Build and Test
+  # Job 1: Build and Test Java Application
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -20,17 +21,25 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Compile Java files
+      - name: Install dependencies (if using Maven)
         run: |
-          mkdir -p bin
+          curl -sSL https://get.sdkman.io | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install maven
+
+      - name: Compile Java application and run tests
+        run: |
           cd src
-          javac Main.java -d ../bin/
+          mvn clean install  # Use Maven to compile and run tests
 
-      - name: Run application
+      - name: Package the application into a JAR file
         run: |
-          cd bin
-          java Main
+          mvn package  # Packages the Java application into a JAR file
 
+      - name: Verify JAR file creation
+        run: |
+          ls -al target  # Verify the JAR file exists in the target folder
+          
   # Job 2: Deploy to Azure Web App
   deploy:
     runs-on: ubuntu-latest
@@ -46,21 +55,24 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Install dependencies (if using Maven)
+        run: |
+          curl -sSL https://get.sdkman.io | bash
+          source "$HOME/.sdkman/bin/sdkman-init.sh"
+          sdk install maven
+
       - name: Compile Java files for deployment
         run: |
-          mkdir -p bin
           cd src
-          javac Main.java -d ../bin/
+          mvn clean install  # Ensure dependencies are installed
 
-      - name: Package JAR file (optional step if needed)
+      - name: Package JAR file for deployment
         run: |
-          echo "Packaging app into JAR (if applicable)"
-          # Use this only if you're turning your code into a JAR
-
+          mvn package  # Package the app into a JAR file
+          
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: java-app  # Replace with your actual app name
+          app-name: java-app  # Replace with your actual Azure Web App name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: bin/  # Adjust this path if deploying a JAR
-
+          package: target/*.jar  # Ensure the path points to your JAR file
