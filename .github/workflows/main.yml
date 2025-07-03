@@ -34,7 +34,7 @@ jobs:
 
       # Upload the compiled Java artifacts (bin directory)
       - name: Upload compiled Java artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: java-artifacts
           path: bin/
@@ -55,7 +55,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Download compiled Java artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: java-artifacts
           path: bin/
