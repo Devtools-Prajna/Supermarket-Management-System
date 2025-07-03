@@ -21,28 +21,26 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Compile Java files
+      - name: Install dependencies (if using Maven)
         run: |
-          mkdir -p bin
-          cd src
-          javac Main.java -d ../bin/
+          mvn clean install  # Packages your app as a JAR
 
-      - name: Run application
+      - name: Run application (optional)
         run: |
-          cd bin
-          java Main
+          cd target
+          java -jar your-application.jar  # Run the JAR file for testing (optional)
 
-      # Upload the compiled Java artifacts (bin directory)
-      - name: Upload compiled Java artifacts
+      # Upload the packaged JAR/WAR file
+      - name: Upload the JAR file
         uses: actions/upload-artifact@v4
         with:
           name: java-artifacts
-          path: bin/
+          path: target/your-application.jar  # Make sure to adjust this path
 
   # Job 2: Deploy to Azure Web App
   deploy:
     runs-on: ubuntu-latest
-    needs: build-and-test  # Ensure this job runs after the build-and-test job
+    needs: build-and-test
 
     steps:
       - name: Checkout source code
@@ -54,15 +52,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Download compiled Java artifacts
+      - name: Download the JAR file
         uses: actions/download-artifact@v4
         with:
           name: java-artifacts
-          path: bin/
+          path: target/
 
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
-          app-name: java-app  # Replace with your actual Azure Web App name
+          app-name: java-app  # Replace with your actual app name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: bin/  # Adjust this path if deploying a JAR or WAR file
+          package: target/your-application.jar  # Path to the JAR file
