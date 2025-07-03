@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Job 1: Build and Test Java Application
+  # Job 1: Build and Test
   build-and-test:
     runs-on: ubuntu-latest
 
@@ -21,29 +21,28 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Install dependencies (if using Maven)
+      - name: Compile Java files
         run: |
-          curl -sSL https://get.sdkman.io | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install maven
-
-      - name: Compile Java application and run tests
-        run: |
+          mkdir -p bin
           cd src
-          mvn clean install  # Use Maven to compile and run tests
+          javac Main.java -d ../bin/
 
-      - name: Package the application into a JAR file
+      - name: Run application
         run: |
-          mvn package  # Packages the Java application into a JAR file
+          cd bin
+          java Main
 
-      - name: Verify JAR file creation
-        run: |
-          ls -al target  # Verify the JAR file exists in the target folder
-          
+      # Upload the compiled artifacts (bin directory)
+      - name: Upload compiled Java artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: java-artifacts
+          path: bin/
+
   # Job 2: Deploy to Azure Web App
   deploy:
     runs-on: ubuntu-latest
-    needs: build-and-test
+    needs: build-and-test  # Ensure this job runs after the build-and-test job
 
     steps:
       - name: Checkout source code
@@ -55,24 +54,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
-      - name: Install dependencies (if using Maven)
-        run: |
-          curl -sSL https://get.sdkman.io | bash
-          source "$HOME/.sdkman/bin/sdkman-init.sh"
-          sdk install maven
+      - name: Download compiled Java artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: java-artifacts
+          path: bin/
 
-      - name: Compile Java files for deployment
-        run: |
-          cd src
-          mvn clean install  # Ensure dependencies are installed
-
-      - name: Package JAR file for deployment
-        run: |
-          mvn package  # Package the app into a JAR file
-          
       - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v2
         with:
           app-name: java-app  # Replace with your actual Azure Web App name
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: target/*.jar  # Ensure the path points to your JAR file
+          package: bin/  # Adjust this path if deploying a JAR or WAR file
