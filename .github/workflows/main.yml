@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch:
 
 jobs:
   # Job 1: Build and Test
@@ -26,7 +25,6 @@ jobs:
           mkdir -p bin
           cd src
           javac Main.java -d ../bin/
-
       - name: Run application
         run: |
           cd bin
