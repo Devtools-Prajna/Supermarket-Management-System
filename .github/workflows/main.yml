@@ -32,9 +32,9 @@ jobs:
           cd bin
           java Main
 
-      # Upload the compiled artifacts (bin directory)
+      # Upload the compiled Java artifacts (bin directory)
       - name: Upload compiled Java artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v2
         with:
           name: java-artifacts
           path: bin/
@@ -49,13 +49,13 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Set up JDK 11
-        uses: actions/setup-java@v2
+        uses: actions/setup-java@v3
         with:
           java-version: '11'
           distribution: 'temurin'
 
       - name: Download compiled Java artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: java-artifacts
           path: bin/
